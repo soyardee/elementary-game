@@ -34,7 +34,7 @@ public class Screen {
                 //if(dx < 0 || dx >= width) break;
                 //perhaps use bitwise operators to generate the tile offset
                 int tileIndex = ((dx >> tileSize) & MAP_MASK) + ((dy >> tileSize) & MAP_MASK) * (MAP_SIZE);
-                pixels[x + y * width] = tiles[tileIndex];
+                pixels[x + y * width] = Sprite.grass.pixels[(dx&15) + (dy&15) * Sprite.grass.SIZE];
             }
         }
     }
