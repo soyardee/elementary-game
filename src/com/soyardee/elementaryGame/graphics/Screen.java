@@ -1,5 +1,7 @@
 package com.soyardee.elementaryGame.graphics;
 
+import com.soyardee.elementaryGame.level.tile.Tile;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -8,7 +10,9 @@ public class Screen {
     private final int MAP_SIZE = 16;
     private final int MAP_MASK = MAP_SIZE - 1;
 
-    private int width, height;
+    public int xOffset, yOffset;
+
+    public int width, height;
     private int tileSize = MAP_SIZE/4;
     public int[] pixels;
     public int[] tiles = new int[MAP_SIZE*MAP_SIZE];
@@ -20,6 +24,7 @@ public class Screen {
         this.height = height;
         pixels = new int[width * height];
 
+        //random tile colors
         for(int i = 0; i< MAP_SIZE*MAP_SIZE; i++) {
             tiles[i] = random.nextInt(0xffffff);
         }
@@ -28,13 +33,11 @@ public class Screen {
     public void render(int xOffset, int yOffset) {
         for(int y = 0; y < height; y++){
             int dy = y + yOffset;
-            //if(dy < 0 || dy >= height) break;
+            if(dy < 0 || dy >= height) continue;
             for(int x = 0; x < width; x++) {
                 int dx = x + xOffset;
-                //if(dx < 0 || dx >= width) break;
-                //perhaps use bitwise operators to generate the tile offset
-                int tileIndex = ((dx >> tileSize) & MAP_MASK) + ((dy >> tileSize) & MAP_MASK) * (MAP_SIZE);
-                pixels[x + y * width] = Sprite.grass.pixels[(dx&15) + (dy&15) * Sprite.grass.SIZE];
+                if(dx < 0 || dx >= width) continue;
+                pixels[dx + dy * width] = Sprite.grass.pixels[(x&15) + (y&15) * Sprite.grass.SIZE];
             }
         }
     }
@@ -45,5 +48,26 @@ public class Screen {
 
     public void clear() {
         Arrays.fill(pixels, 0);
+    }
+
+    public void renderTile(int xPos, int yPos, Tile tile) {
+        xPos -= xOffset;
+        yPos -= yOffset;
+        for (int y=0; y<tile.sprite.SIZE; y++) {
+            int yAbs = y + yPos;
+            for (int x=0; x<tile.sprite.SIZE; x++) {
+                int xAbs = x + xPos;
+                //only render what you can see
+                if (xAbs < 0 || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                pixels[xAbs +yAbs*width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+
+            }
+
+        }
+    }
+
+    public void setOffset(int xOffset, int yOffset) {
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
     }
 }

@@ -10,6 +10,17 @@ import java.awt.image.DataBufferInt;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
 
+
+/*
+ * The base engine code is done with assistance from TheChernoProject's java game programming
+ * series where noted. Otherwise, all game design was by me.
+ * This program is in no way sufficiently advanced or optimized, but requires no additional
+ * dependencies.
+ *
+ * If I had a few months, I'd consider learning the LWJGL API to create low level access calls to OpenGL for
+ * far better performance.
+ */
+
 public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +65,7 @@ public class Game extends Canvas implements Runnable {
     public synchronized void start() {
         //start running the game
         running = true;
-        //the thread attaches to this game instance
+        //open the instance of the game in a new thread.
         thread = new Thread(this, "Display");
         //boot up the thread into a new instance
         thread.start();
@@ -83,9 +94,11 @@ public class Game extends Canvas implements Runnable {
         int updates = 0;    //how many times the update method is called
 
 
+        frame.requestFocus();
 
         while(running) {
             long currentTime = System.nanoTime();
+            //calculated to the division of a second (ex 60 for 1/60th of a second)
             delta += (currentTime - lastTime) / nano;
             lastTime = currentTime;
             while (delta >= 1) {
