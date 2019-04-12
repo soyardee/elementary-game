@@ -7,8 +7,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 //custom code
+import com.soyardee.elementaryGame.entity.mob.Player;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
+import com.soyardee.elementaryGame.level.Level;
+import com.soyardee.elementaryGame.level.RandomLevel;
 
 
 /*
@@ -26,7 +29,6 @@ public class Game extends Canvas implements Runnable {
 
     //simple tile animation
     //TODO remove class reference
-    int tileDx = 0, tileDy = 0;
 
     private int updateRate = 60;
 
@@ -42,6 +44,8 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;            //watch out for global declaration
 
     private Screen screen;
+    private Level level;
+    private Player player;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -56,8 +60,10 @@ public class Game extends Canvas implements Runnable {
         setPreferredSize(size);
 
         screen = new Screen(width, height);
-        frame = new JFrame();
+        level = new RandomLevel(64, 64);
         keyMap = new Keyboard();
+        player = new Player(keyMap);
+        frame = new JFrame();
         frame.addKeyListener(keyMap);
     }
 
@@ -87,18 +93,25 @@ public class Game extends Canvas implements Runnable {
     public void run() {
         //get the precise time since the game start
         long lastTime = System.nanoTime();
+
+        //for use in the update method
         long timer = System.currentTimeMillis();
+
+        //calculated to the division of a second (ex 60 for 1/60th of a second)
         final double nano = 1000000000.0 / (double) updateRate;
         double delta = 0;
         int frames = 0;     //how many frames to render
         int updates = 0;    //how many times the update method is called
 
 
+        //upon window creation, make sure that the user is active in this component
+        //(for keyboard/mouse input)
         frame.requestFocus();
 
+        //the game loop itself
         while(running) {
             long currentTime = System.nanoTime();
-            //calculated to the division of a second (ex 60 for 1/60th of a second)
+
             delta += (currentTime - lastTime) / nano;
             lastTime = currentTime;
             while (delta >= 1) {
@@ -121,10 +134,8 @@ public class Game extends Canvas implements Runnable {
     public void update() {
         keyMap.update();
 
-        if(keyMap.up) tileDy--;
-        if(keyMap.down) tileDy++;
-        if(keyMap.left) tileDx--;
-        if(keyMap.right) tileDx++;
+        //TODO update the game with all the mobs
+        player.update();
     }
 
     public void render() {
@@ -136,27 +147,32 @@ public class Game extends Canvas implements Runnable {
         }
 
 
+        //reset the screen calculations this frame
         screen.clear();
-        //calculate the pixel colors and stuff
-        screen.render(tileDx,tileDy);
 
-        //once the pixels have been calculated, spit that out into the global int array
+        //center the player sprite into the center of the screen
+        int xScroll = player.x - screen.width / 2;
+        int yScroll = player.y - screen.height / 2;
+
+        //calculate the relations of the tiles and entities to the actual screen
+        level.render(xScroll, yScroll, screen);
+        player.render(screen);
+
+        //once the pixels have been calculated in the screen class,
+        //spit the resulting array into the global int array
         //to be used in the BufferedImage
         screen.bufferOut(pixelMap);
 
-        //feed some data into the buffers from a graphics object
-
+        //create a new graphics object with the same properties as the int pixel buffer
         Graphics g = bs.getDrawGraphics();
 
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0, getWidth(), getHeight());
-
+        //access the BufferedImage's pixel map and format it to the size of the screen
         g.drawImage(image, 0,0, getWidth(), getHeight(), null);
 
         //clear the current graphics buffer from memory
         g.dispose();
 
-        //blit the buffer to the screen
+        //blit the buffer to the screen (in case of multiple buffers this frame)
         bs.show();
 
     }

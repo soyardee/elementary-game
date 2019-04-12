@@ -1,5 +1,6 @@
 package com.soyardee.elementaryGame.graphics;
 
+import com.soyardee.elementaryGame.entity.mob.Player;
 import com.soyardee.elementaryGame.level.tile.Tile;
 
 import java.util.Arrays;
@@ -30,17 +31,6 @@ public class Screen {
         }
     }
 
-    public void render(int xOffset, int yOffset) {
-        for(int y = 0; y < height; y++){
-            int dy = y + yOffset;
-            if(dy < 0 || dy >= height) continue;
-            for(int x = 0; x < width; x++) {
-                int dx = x + xOffset;
-                if(dx < 0 || dx >= width) continue;
-                pixels[dx + dy * width] = Sprite.grass.pixels[(x&15) + (y&15) * Sprite.grass.SIZE];
-            }
-        }
-    }
 
     public void bufferOut(int[] copyTo) {
         System.arraycopy(pixels, 0, copyTo, 0, pixels.length);
@@ -58,11 +48,30 @@ public class Screen {
             for (int x=0; x<tile.sprite.SIZE; x++) {
                 int xAbs = x + xPos;
                 //only render what you can see
-                if (xAbs < 0 || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if (xAbs < -tile.sprite.SIZE || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if(xAbs < 0) xAbs = 0;
                 pixels[xAbs +yAbs*width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 
             }
+        }
+    }
 
+    public void renderPlayer(int xPos, int yPos, Sprite sprite) {
+        xPos -= xOffset;
+        yPos -= yOffset;
+        for (int y=0; y<16; y++) {
+            int yAbs = y + yPos;
+            for (int x=0; x<16; x++) {
+                int xAbs = x + xPos;
+                //only render what you can see
+                if (xAbs < -16 || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if(xAbs < 0) xAbs = 0;
+                int col = sprite.pixels[x + y * 16];
+
+                if(col != 0xFFFF00FF)
+                    pixels[xAbs +yAbs*width] = col;
+
+            }
         }
     }
 

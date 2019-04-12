@@ -30,15 +30,15 @@ public class Level {
 
     }
 
-    protected void render(int xScroll, int yScroll, Screen screen) {
+    public void render(int xScroll, int yScroll, Screen screen) {
         //set the offset to the actual location of the player
         screen.setOffset(xScroll, yScroll);
 
         //TODO adjust tile size scale as variable
         int x0 = xScroll / 16;          //the size scale of the tile at the leftmost position
-        int x1 = (xScroll + screen.width) / 16; //rightmost position in tile scale
+        int x1 = (xScroll + screen.width + 16) / 16; //rightmost position in tile scale
         int y0 = yScroll / 16;                  //topmost position in tile scale
-        int y1 = (yScroll + screen.height) /16; //bottom position in tile scale
+        int y1 = (yScroll + screen.height + 16) /16; //bottom position in tile scale
 
         for(int y = y0; y < y1; y++) {
             for (int x = x0; x <x1; x++) {
@@ -50,6 +50,7 @@ public class Level {
     }
 
     public Tile getTile(int x, int y) {
+        if(x < 0 || y< 0 || x >= width || y>=height) return Tile.empty;
         if(tiles[x+y * width] == 0) return Tile.grass;
         return Tile.empty;
     }

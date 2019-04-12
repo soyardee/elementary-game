@@ -11,9 +11,12 @@ public class Sprite {
 
 
 
-    //static sprite types go here. Perhaps we can automate this?
-    public static Sprite emptySprite = new Sprite(16, 0);
+    //static sprite types go here. Perhaps we can automate this when we load the classes? Eh.
+    public static Sprite emptySprite = new Sprite(16, 0x0000FF);
     public static Sprite grass = new Sprite(16, 0,0, SpriteSheet.tiles);
+
+    //entity sprites
+    public static Sprite player0 = new Sprite(16, 10, 0, SpriteSheet.tiles);
 
     public Sprite(int size, int x, int y, SpriteSheet sheet) {
         SIZE = size;

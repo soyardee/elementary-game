@@ -11,6 +11,6 @@ public class GrassTile extends Tile {
 
     public void render(int x, int y, Screen screen) {
         //render this particular tile to the screen
-        screen.renderTile(x, y, this);
+        screen.renderTile(x * 16, y * 16, this);
     }
 }

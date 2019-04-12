@@ -2,7 +2,6 @@ package com.soyardee.elementaryGame.graphics;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 
 //Helper class to load the sprite sheet into memory
