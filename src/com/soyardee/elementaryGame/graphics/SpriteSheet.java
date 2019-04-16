@@ -13,6 +13,7 @@ public class SpriteSheet {
 
     //SpriteSheets paths and callable constructors go here
     public static SpriteSheet tiles = new SpriteSheet("/tex/sprites.png", 256);
+    public static SpriteSheet stars = new SpriteSheet("/tex/starfield.png", 64);
 
     public SpriteSheet(String path, int size) {
         this.SIZE = size;

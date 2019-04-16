@@ -3,14 +3,12 @@ package com.soyardee.elementaryGame.entity;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.level.Level;
 
-import java.util.Random;
 
 public class Entity {
 
     public int x, y;
     private boolean removed = false;
     protected Level level;
-    protected final Random random = new Random();
 
     public void update() {
 

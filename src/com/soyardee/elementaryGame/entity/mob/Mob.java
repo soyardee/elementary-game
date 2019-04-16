@@ -11,14 +11,19 @@ public abstract class Mob extends Entity {
     protected boolean moving = false;
 
     public void move(int xPos, int yPos) {
+        if(xPos != 0 && yPos != 0) {
+            move(xPos, 0);
+            move(0, yPos);
+            return;
+        }
 
         if(xPos > 0) dir = 1;
         if(xPos < 0) dir = 3;
         if(yPos > 0) dir = 2;
         if(yPos < 0) dir = 0;
 
-        //handle collision before allowing to move
-        if(!collision()) {
+        //handle collision
+        if(!collision(xPos, yPos)) {
             x+=xPos;
             y+=yPos;
         }
@@ -32,8 +37,9 @@ public abstract class Mob extends Entity {
 
     }
 
-    private boolean collision() {
-        return false;
+    private boolean collision(int xa, int ya) {
+        boolean block = false;
+        return block;
     }
 
 }

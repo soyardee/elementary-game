@@ -10,8 +10,10 @@ import java.awt.image.DataBufferInt;
 import com.soyardee.elementaryGame.entity.mob.Player;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
+import com.soyardee.elementaryGame.level.AsteroidField;
 import com.soyardee.elementaryGame.level.Level;
 import com.soyardee.elementaryGame.level.RandomLevel;
+import com.soyardee.elementaryGame.level.StarField;
 
 
 /*
@@ -45,6 +47,8 @@ public class Game extends Canvas implements Runnable {
 
     private Screen screen;
     private Level level;
+    private StarField stars;
+    private AsteroidField asteroidField;
     private Player player;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -61,8 +65,11 @@ public class Game extends Canvas implements Runnable {
 
         screen = new Screen(width, height);
         level = new RandomLevel(64, 64);
+        stars = new StarField(16);
+        asteroidField = new AsteroidField(20, 0.8f, screen);
+
         keyMap = new Keyboard();
-        player = new Player(keyMap);
+        player = new Player(width/2 -16, height-32,keyMap,screen);
         frame = new JFrame();
         frame.addKeyListener(keyMap);
     }
@@ -132,6 +139,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void update() {
+        stars.update();
+        asteroidField.update();
+
         keyMap.update();
 
         //TODO update the game with all the mobs
@@ -155,7 +165,9 @@ public class Game extends Canvas implements Runnable {
         int yScroll = player.y - screen.height / 2;
 
         //calculate the relations of the tiles and entities to the actual screen
-        level.render(xScroll, yScroll, screen);
+        //level.render(xScroll, yScroll, screen);
+        stars.render(screen);
+        asteroidField.render();
         player.render(screen);
 
         //once the pixels have been calculated in the screen class,

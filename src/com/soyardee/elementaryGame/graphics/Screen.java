@@ -1,6 +1,7 @@
 package com.soyardee.elementaryGame.graphics;
 
 import com.soyardee.elementaryGame.entity.mob.Player;
+import com.soyardee.elementaryGame.level.StarField;
 import com.soyardee.elementaryGame.level.tile.Tile;
 
 import java.util.Arrays;
@@ -48,10 +49,63 @@ public class Screen {
             for (int x=0; x<tile.sprite.SIZE; x++) {
                 int xAbs = x + xPos;
                 //only render what you can see
-                if (xAbs < -tile.sprite.SIZE || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if(xAbs < -tile.sprite.SIZE || xAbs >= width || yAbs < 0 || yAbs >= height) break;
                 if(xAbs < 0) xAbs = 0;
                 pixels[xAbs +yAbs*width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 
+            }
+        }
+    }
+
+    //MAKE SURE THE MASK HAS THE TRANSPARENCY VALUE ASSIGNED AT THE FRONT!
+    public void renderTile(int xOffset, int yOffset, Tile tile, int mask){
+        int starTileSize = tile.sprite.SIZE;
+        for (int y=0; y<starTileSize; y++) {
+            int dy = y + yOffset;
+            for (int x=0; x<starTileSize; x++) {
+                int dx = x + xOffset;
+                if(dx < -starTileSize || dx >= width || dy < 0 || dy >= height) break;
+                if(dx < 0) dx = 0;
+
+                int col = tile.sprite.pixels[x + y*tile.sprite.SIZE];
+                if(col != mask) {
+                    pixels[dx + dy * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+                }
+
+            }
+        }
+    }
+
+    public void renderTileLoop(int xOffset, int yOffset, int[] tilePicker, int mask){
+        int starTileSize = 16;
+        for(int y = 0; y < height; y++){
+            int dy = y + yOffset;
+            for(int x = 0; x < width; x++) {
+                int dx = x + xOffset;
+                //bitwise operators to generate the tile offset
+                int tileIndex = ((dx >> (tileSize)) & MAP_MASK) + ((dy >> (tileSize)) & MAP_MASK) * (MAP_SIZE);
+
+                int tileRow = (x & (starTileSize-1));
+                int tileCol = (y & (starTileSize-1));
+                int col = StarField.starArrayTiles[tilePicker[tileIndex]].sprite.pixels[tileRow + tileCol * starTileSize];
+                if(col != mask) {
+                    pixels[x + y * width] = StarField.starArrayTiles[tilePicker[tileIndex]].sprite.pixels[tileRow + tileCol * starTileSize];
+                }
+            }
+        }
+    }
+
+
+    //PRE: array must have coordinates updated externally
+    //render an array of colors in tile form
+    public void renderField(int xOffset, int yOffset, int[] colorRange) {
+        for(int y = 0; y < height; y++){
+            int dy = y + yOffset;
+            for(int x = 0; x < width; x++) {
+                int dx = x + xOffset;
+                //bitwise operators to generate the tile offset
+                int tileIndex = ((dx >> (tileSize+1)) & MAP_MASK) + ((dy >> (tileSize+1)) & MAP_MASK) * (MAP_SIZE);
+                pixels[x + y * width] = colorRange[tileIndex];
             }
         }
     }
@@ -74,6 +128,7 @@ public class Screen {
             }
         }
     }
+
 
     public void setOffset(int xOffset, int yOffset) {
         this.xOffset = xOffset;
