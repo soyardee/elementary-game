@@ -14,6 +14,7 @@ import com.soyardee.elementaryGame.input.Keyboard;
 import com.soyardee.elementaryGame.level.AsteroidField;
 import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
+import com.soyardee.questionParser.QuestionList;
 
 
 /*
@@ -51,6 +52,7 @@ public class Game extends Canvas implements Runnable {
     private StarField starField;
     private ParticleHandler particles;
     private Player player;
+    private QuestionList questionList;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -71,6 +73,8 @@ public class Game extends Canvas implements Runnable {
         asteroidField = new AsteroidField(20, 0.1f, screen);
         starField = new StarField(2, 4*updateRate, 3*updateRate, screen);
         particles = new ParticleHandler();
+        questionList = new QuestionList("/questions/questions.xml");
+        questionList.printQuestions();
 
         keyMap = new Keyboard();
         player = new Player(width/2 -16, height-32,keyMap,screen);
