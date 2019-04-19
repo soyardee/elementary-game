@@ -11,11 +11,6 @@ public abstract class Mob extends Entity {
     protected boolean moving = false;
 
     public void move(int xPos, int yPos) {
-        if(xPos != 0 && yPos != 0) {
-            move(xPos, 0);
-            move(0, yPos);
-            return;
-        }
 
         if(xPos > 0) dir = 1;
         if(xPos < 0) dir = 3;

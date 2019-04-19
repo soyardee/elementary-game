@@ -1,7 +1,5 @@
 package com.soyardee.elementaryGame.graphics;
 
-import com.soyardee.elementaryGame.entity.mob.Player;
-import com.soyardee.elementaryGame.level.StarField;
 import com.soyardee.elementaryGame.level.tile.Tile;
 
 import java.util.Arrays;
@@ -39,6 +37,19 @@ public class Screen {
 
     public void clear() {
         Arrays.fill(pixels, 0);
+    }
+
+    public void renderSprite(int xp, int yp, Sprite sprite) {
+        int size = sprite.SIZE;
+        for(int y=0; y<size; y++) {
+            int yAbs = y + yp;
+            for(int x=0; x<size; x++) {
+                int xAbs = x+xp;
+                if(xAbs < -size || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if(xAbs < 0) xAbs = 0;
+                pixels[xAbs +yAbs*width] = sprite.pixels[x + y * size];
+            }
+        }
     }
 
     public void renderTile(int xPos, int yPos, Tile tile) {
@@ -90,19 +101,22 @@ public class Screen {
         }
     }
 
-    public void renderPlayer(int xPos, int yPos, Sprite sprite) {
+    public void renderPlayer(int xPos, int yPos, Sprite sprite, int mask) {
         xPos -= xOffset;
         yPos -= yOffset;
-        for (int y=0; y<16; y++) {
+
+        int playerTileSize = sprite.SIZE;
+
+        for (int y=0; y<playerTileSize; y++) {
             int yAbs = y + yPos;
-            for (int x=0; x<16; x++) {
+            for (int x=0; x<playerTileSize; x++) {
                 int xAbs = x + xPos;
                 //only render what you can see
-                if (xAbs < -16 || xAbs >= width || yAbs < 0 || yAbs >= height) break;
+                if (xAbs < -playerTileSize || xAbs >= width || yAbs < 0 || yAbs >= height) break;
                 if(xAbs < 0) xAbs = 0;
-                int col = sprite.pixels[x + y * 16];
+                int col = sprite.pixels[x + y * playerTileSize];
 
-                if(col != 0xFFFF00FF)
+                if(col != mask)
                     pixels[xAbs +yAbs*width] = col;
 
             }

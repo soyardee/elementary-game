@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class AsteroidField {
 
-    private ArrayList<Asteroid> field;
+    private ArrayList<Asteroid> asteroidArrayList;
     private Screen screen;
     public int maxOnScreen;
     public float spawnChance;
@@ -21,38 +21,38 @@ public class AsteroidField {
         this.maxOnScreen = maxOnScreen;
         this.spawnChance = spawnChance;
         this.screen = screen;
-        field = new ArrayList<>();
+        asteroidArrayList = new ArrayList<>();
         random = new Random();
     }
 
     public void update(){
-        //if no asteroids in the field, create a new one
+        //if no asteroids/stars in the asteroidArrayList, create a new one
 
         boolean allowNewAsteroid = true;
         boolean chance = Math.random() < spawnChance;
 
 
-        for(Asteroid a: field) {
+        for(Asteroid a: asteroidArrayList) {
             a.update(screen);
-            allowNewAsteroid = a.isOnScreen();
+            allowNewAsteroid = a.isBelowTop();
         }
 
-        if(field.size() < maxOnScreen && allowNewAsteroid && chance) {
-            int xstart = random.nextInt(screen.width/16);
-            field.add(new Asteroid(xstart, -16, Sprite.asteroid0));
+        if(asteroidArrayList.size() < maxOnScreen && allowNewAsteroid && chance) {
+            int xstart = random.nextInt((screen.width/16)+1);
+            asteroidArrayList.add(new Asteroid(xstart, -16, Sprite.asteroid0));
         }
 
-        field.removeIf(n -> (n.isDiscard()));
+        asteroidArrayList.removeIf(n -> (n.isDiscard()));
     }
 
-    public void render() {
-        for (Asteroid a: field){
+    public void render(Screen screen) {
+        for (Asteroid a: asteroidArrayList){
             a.render(screen);
         }
     }
 
     public boolean isOverlap(int x, int y, int width, int height) {
-        for(Asteroid a : field) {
+        for(Asteroid a : asteroidArrayList) {
             int rectOneRight = x + width;
             int rectOneLeft = x;
             int rectOneTop = y;
@@ -70,6 +70,7 @@ public class AsteroidField {
                     && rectOneTop < rectTwoBottom;
 
             if(intersects && a.isVisible()) {
+                //destroy animation
                 a.setVisible(false);
                 return true;
             }

@@ -1,95 +1,90 @@
 package com.soyardee.elementaryGame.level;
 
-/*
- * The background starfield that is rendered behind everything
- */
-
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.graphics.Sprite;
-import com.soyardee.elementaryGame.graphics.SpriteSheet;
-import com.soyardee.elementaryGame.level.tile.Tile;
+import com.soyardee.elementaryGame.level.tile.Star;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class StarField {
 
-    // a value of 0 (black) is ignored when called in the screen render method.
-    public SpriteSheet sheet;
-    public int x,y;
-    public final int SIZE;
-    private int yOffset = 0;
-    private int xOffset = 0;
-    private Random random = new Random();
+    private ArrayList<Star> starArrayList;
+    private Screen screen;
+    public int maxOnScreen;
+    private int maxSpawnTime;
+    private int minSpawnTime;
+    private int randomSpawnTime;
+    private int currentSpawnTime;
+    private Random random;
 
-    //representative of the size of the screen in tile size
-    //TODO actually grab the size of the screen
-    private int height = 20;
-    private int width = 20;
+    public StarField(int maxOnScreen, int maxSpawnTime, int minSpawnTime, Screen screen) {
+        starArrayList = new ArrayList<>();
+        this.maxOnScreen = maxOnScreen;
+        this.maxSpawnTime = maxSpawnTime;
+        this.minSpawnTime = minSpawnTime;
+        this.screen = screen;
+        random = new Random();
+        randomSpawnTime = random.nextInt(maxSpawnTime-minSpawnTime) + minSpawnTime;
+        currentSpawnTime = 0;
 
-    private int[] colorField = new int[height * width];
-    private int[] starArrayOrder = new int[height * width];
-
-    //starfield tiles in order
-    public static Tile[] starArrayTiles = new Tile[(SpriteSheet.stars.SIZE * SpriteSheet.stars.SIZE) / 16];
-
-
-    //load in a few different sprites from the provided sheet
-
-    public StarField(int size, int x, int y, SpriteSheet sheet) {
-        this.SIZE = size;
-        this.x = x;
-        this.y = y;
-        this.sheet = sheet;
-        load();
     }
 
-    public StarField(int size) {
-        this.SIZE = size;
-        this.x = 0;
-        this.y = 0;
-        this.sheet = SpriteSheet.stars;
-        load();
-        generateField(colorField, 16);
-        generateField(starArrayOrder, SIZE);
-    }
+    public void update() {
 
-    //load the specified segment of stars in from the file at the coordinate (x,y)
-    public void load(){
-        int bound = SpriteSheet.stars.SIZE / 16;
-        for(int y = 0; y<bound; y++){
-            for(int x = 0; x<bound; x++){
-                starArrayTiles[x + y*bound] = new Tile(new Sprite(this.SIZE, x, y, SpriteSheet.stars));
+        for (Star s: starArrayList) {
+            s.update(screen);
+        }
+
+        if(starArrayList.size() < maxOnScreen) {
+
+            if (currentSpawnTime >= randomSpawnTime) {
+                //add a new star
+                int xStart = random.nextInt(screen.width/16);
+                starArrayList.add(new Star(xStart, -16, Sprite.starLocked));
+
+                currentSpawnTime = 0;
+                randomSpawnTime = random.nextInt(maxSpawnTime - minSpawnTime) + minSpawnTime;
+            } else {
+                currentSpawnTime++;
             }
         }
-    }
-
-    //this works best when we can adapt to the size of the screen itself
-    //it will work for now
-    private void generateField(int[] arr, int bound){
-        for(int i = 0; i<starArrayOrder.length; i++){
-            arr[i] = random.nextInt(bound);
-        }
-    }
-
-    public void update(){
-        yOffset--;
+        starArrayList.removeIf(n -> (n.isDiscard()));
     }
 
     public void render(Screen screen) {
-        screen.renderField(x, yOffset, colorField);
-
-        //pick out the tiles from the tiles storage class from the int array
-        //screen.renderTileLoop(x, yOffset, starArrayOrder, 0xff000000);
+        for(Star s: starArrayList) {
+            s.render(screen);
+        }
     }
 
-    public Tile getTile(int x, int y) {
-        return starArrayTiles[starArrayOrder[x + y * height]];
+    public boolean isOverlapPlayer(int x, int y, int width, int height) {
+        for (Star s: starArrayList) {
+            boolean intersects =
+                    x+width > s.x * s.sprite.SIZE &&
+                    x < s.x * s.sprite.SIZE + s.sprite.SIZE &&
+                    y + height > s.y &&
+                    y < s.y+s.sprite.SIZE;
+            if(intersects && s.isVisible() && s.isUnlocked()){
+                s.setVisible(false);
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Tile getTile(int x) {
-        return starArrayTiles[starArrayOrder[x]];
+    public boolean isOverlapParticle(int x, int y, int width, int height) {
+        for (Star s: starArrayList) {
+            boolean intersects =
+                    x+width > s.x * s.sprite.SIZE &&
+                            x < s.x * s.sprite.SIZE + s.sprite.SIZE &&
+                            y + height > s.y &&
+                            y < s.y+s.sprite.SIZE;
+            if(intersects && s.isVisible() && !s.isUnlocked()){
+                s.unlock();
+                return true;
+            }
+        }
+        return false;
     }
-
-
-
 }

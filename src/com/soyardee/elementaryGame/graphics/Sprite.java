@@ -16,13 +16,16 @@ public class Sprite {
     public static Sprite grass = new Sprite(16, 0,0, SpriteSheet.tiles);
 
     //entity sprites
-    public static Sprite player0 = new Sprite(16, 0, 1, SpriteSheet.tiles);
-    public static Sprite player1 = new Sprite(16, 1, 1, SpriteSheet.tiles);
-    public static Sprite player2 = new Sprite(16, 0, 2, SpriteSheet.tiles);
-    public static Sprite player3 = new Sprite(16, 1, 2, SpriteSheet.tiles);
+    public static Sprite player0 = new Sprite(32, 0, 1, SpriteSheet.tiles);
+
 
     //asteroid sprites
     public static Sprite asteroid0 = new Sprite(16, 0, 0, SpriteSheet.tiles);
+    public static Sprite starLocked = new Sprite(16, 0, 1, SpriteSheet.tiles);
+    public static Sprite starUnlocked = new Sprite(16, 1, 1, SpriteSheet.tiles);
+
+    //particle sprites
+    public static Sprite particle0 = new Sprite(3, 0xFF0000);
 
 
 

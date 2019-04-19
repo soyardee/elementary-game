@@ -7,9 +7,12 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import com.soyardee.elementaryGame.entity.mob.Player;
+import com.soyardee.elementaryGame.entity.particle.Particle;
+import com.soyardee.elementaryGame.entity.particle.ParticleHandler;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
 import com.soyardee.elementaryGame.level.AsteroidField;
+import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
 
 
@@ -43,8 +46,10 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
 
     private Screen screen;
-    private StarField stars;
+    private ScrollingBackground scrollingBG;
     private AsteroidField asteroidField;
+    private StarField starField;
+    private ParticleHandler particles;
     private Player player;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -60,8 +65,12 @@ public class Game extends Canvas implements Runnable {
         setPreferredSize(size);
 
         screen = new Screen(width, height);
-        stars = new StarField(16);
+        scrollingBG = new ScrollingBackground(16);
+
+        //TODO put these things into the level class
         asteroidField = new AsteroidField(20, 0.1f, screen);
+        starField = new StarField(2, 4*updateRate, 3*updateRate, screen);
+        particles = new ParticleHandler();
 
         keyMap = new Keyboard();
         player = new Player(width/2 -16, height-32,keyMap,screen);
@@ -126,7 +135,8 @@ public class Game extends Canvas implements Runnable {
 
             if(System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount());
+                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount()
+                + " | getcount: " + player.getGetCount());
                 updates = 0;
                 frames = 0;
             }
@@ -134,13 +144,15 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void update() {
-        stars.update();
+        scrollingBG.update();
         asteroidField.update();
+        starField.update();
 
         keyMap.update();
 
         //TODO update the game with all the mobs
-        player.update(asteroidField);
+        player.update(asteroidField, starField, particles);
+        particles.update(asteroidField, starField);
 
 
     }
@@ -163,9 +175,11 @@ public class Game extends Canvas implements Runnable {
 
         //calculate the relations of the tiles and entities to the actual screen
         //level.render(xScroll, yScroll, screen);
-        stars.render(screen);
-        asteroidField.render();
+        scrollingBG.render(screen);
+        starField.render(screen);
+        asteroidField.render(screen);
         player.render(screen);
+        particles.render(screen);
 
         //once the pixels have been calculated in the screen class,
         //spit the resulting array into the global int array
