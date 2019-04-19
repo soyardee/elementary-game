@@ -34,9 +34,8 @@ public class AsteroidField {
 
         for(Asteroid a: field) {
             a.update(screen);
-            if(!a.isOnScreen()) allowNewAsteroid = false;
+            allowNewAsteroid = a.isOnScreen();
         }
-
 
         if(field.size() < maxOnScreen && allowNewAsteroid && chance) {
             int xstart = random.nextInt(screen.width/16);
@@ -50,6 +49,32 @@ public class AsteroidField {
         for (Asteroid a: field){
             a.render(screen);
         }
+    }
+
+    public boolean isOverlap(int x, int y, int width, int height) {
+        for(Asteroid a : field) {
+            int rectOneRight = x + width;
+            int rectOneLeft = x;
+            int rectOneTop = y;
+            int rectOneBottom = y+height;
+
+            int rectTwoRight = a.x * a.sprite.SIZE + a.sprite.SIZE;
+            int rectTwoLeft = a.x * a.sprite.SIZE;
+            int rectTwoTop = a.y;
+            int rectTwoBottom = a.y+a.sprite.SIZE;
+
+            boolean intersects =
+                    rectOneRight > rectTwoLeft
+                    && rectOneLeft < rectTwoRight
+                    && rectOneBottom > rectTwoTop
+                    && rectOneTop < rectTwoBottom;
+
+            if(intersects && a.isVisible()) {
+                a.setVisible(false);
+                return true;
+            }
+        }
+        return false;
     }
 
 

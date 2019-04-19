@@ -22,7 +22,6 @@ public abstract class Mob extends Entity {
         if(yPos > 0) dir = 2;
         if(yPos < 0) dir = 0;
 
-        //handle collision
         if(!collision(xPos, yPos)) {
             x+=xPos;
             y+=yPos;

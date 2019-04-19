@@ -76,26 +76,6 @@ public class Screen {
         }
     }
 
-    public void renderTileLoop(int xOffset, int yOffset, int[] tilePicker, int mask){
-        int starTileSize = 16;
-        for(int y = 0; y < height; y++){
-            int dy = y + yOffset;
-            for(int x = 0; x < width; x++) {
-                int dx = x + xOffset;
-                //bitwise operators to generate the tile offset
-                int tileIndex = ((dx >> (tileSize)) & MAP_MASK) + ((dy >> (tileSize)) & MAP_MASK) * (MAP_SIZE);
-
-                int tileRow = (x & (starTileSize-1));
-                int tileCol = (y & (starTileSize-1));
-                int col = StarField.starArrayTiles[tilePicker[tileIndex]].sprite.pixels[tileRow + tileCol * starTileSize];
-                if(col != mask) {
-                    pixels[x + y * width] = StarField.starArrayTiles[tilePicker[tileIndex]].sprite.pixels[tileRow + tileCol * starTileSize];
-                }
-            }
-        }
-    }
-
-
     //PRE: array must have coordinates updated externally
     //render an array of colors in tile form
     public void renderField(int xOffset, int yOffset, int[] colorRange) {

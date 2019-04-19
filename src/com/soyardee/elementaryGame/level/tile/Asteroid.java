@@ -9,7 +9,7 @@ public class Asteroid extends Tile {
 
     private int speed;
     private Random random;
-    private boolean discard, onScreen;
+    private boolean discard, onScreen, visible;
 
     public Asteroid (int startx, int starty, Sprite sprite){
         super(sprite);
@@ -19,6 +19,7 @@ public class Asteroid extends Tile {
         onScreen = starty <= 0;
         random = new Random();
         speed = random.nextInt(2) + 1;
+        visible = true;
     }
 
     public void update(Screen screen) {
@@ -28,7 +29,7 @@ public class Asteroid extends Tile {
     }
 
     public void render(Screen screen) {
-        screen.renderTile(x*sprite.SIZE, y, this, 0xffff00ff);
+        if(visible) screen.renderTile(x*sprite.SIZE, y, this, 0xffff00ff);
     }
 
     public boolean isDiscard() {
@@ -38,4 +39,8 @@ public class Asteroid extends Tile {
     public boolean isOnScreen(){
         return onScreen;
     }
+
+    public boolean isVisible(){return visible;}
+
+    public void setVisible(boolean visible) {this.visible = visible;}
 }

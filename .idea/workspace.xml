@@ -2,21 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85d830c0-a370-47ea-80a9-76fac4d81041" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/StarField.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/tex/sprites.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/tex/sprites.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Sprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Sprite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/SpriteSheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/SpriteSheet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/GrassTile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/RandomLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,96 +27,31 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1155894329">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="java" value="20" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="JAVA" value="20" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="8376" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="8376" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="68" column="43" selection-start-line="68" selection-start-column="43" selection-end-line="68" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="901">
+              <caret line="63" column="49" selection-start-line="63" selection-start-column="49" selection-end-line="63" selection-end-column="49" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java">
+        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="52" column="71" selection-start-line="52" selection-start-column="71" selection-end-line="52" selection-end-column="71" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="18" column="63" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="63" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#515#516#0" expanded="true" />
-                <element signature="e#543#544#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
+            <state relative-caret-position="408">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -131,28 +62,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="30" column="62" lean-forward="true" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+            <state relative-caret-position="374">
+              <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#784#785#0" expanded="true" />
-                <element signature="e#841#842#0" expanded="true" />
-                <element signature="e#875#876#0" expanded="true" />
-                <element signature="e#905#906#0" expanded="true" />
-                <element signature="e#903#904#0" expanded="true" />
-                <element signature="e#935#936#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#777#778#0" expanded="true" />
+                <element signature="e#858#859#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -161,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/StarField.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="-777">
               <caret line="14" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -171,24 +86,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java">
+        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+            <state relative-caret-position="187">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/EmptyTile.java">
+        <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="5" lean-forward="true" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#228#229#0" expanded="true" />
-                <element signature="e#257#258#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="974">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
             </state>
           </provider>
         </entry>
@@ -221,25 +131,26 @@
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/EmptyTile.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/SpriteSheet.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/GrassTile.java" />
-        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java" />
-        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Sprite.java" />
-        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Asteroid.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java" />
-        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/StarField.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java" />
-        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java" />
         <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java" />
+        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java" />
+        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java" />
+        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java" />
+        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="974" />
-    <option name="height" value="1087" />
+    <option name="height" value="1022" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -330,7 +241,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555389174154" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555552541592" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../labs/PatternMatching" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -388,10 +299,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2576" height="1456" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2662957" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13646056" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -400,7 +311,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3290469" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32753405" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3271028" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39939487" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -449,23 +360,9 @@
       <window_info anchor="right" id="Maven" order="8" />
     </layout-to-restore>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/Runnable.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/GrassTile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="13" column="26" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#229#230#0" expanded="true" />
-            <element signature="e#258#259#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/GrassTile.java" />
     <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/SpriteSheet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -473,39 +370,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Asteroid.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#396#397#0" expanded="true" />
-            <element signature="e#431#432#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Asteroid.java" />
     <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Sprite.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="24" column="77" selection-start-line="24" selection-start-column="77" selection-end-line="24" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/RandomLevel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -519,10 +388,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="18" column="63" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/EmptyTile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="true" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+        <state relative-caret-position="85">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#228#229#0" expanded="true" />
@@ -531,38 +410,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="833">
+          <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/RandomLevel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#777#778#0" expanded="true" />
+            <element signature="e#858#859#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/graphics/Screen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+        <state relative-caret-position="974">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Tile.java">
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="18" column="63" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="63" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#515#516#0" expanded="true" />
-            <element signature="e#543#544#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="272">
+          <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java">
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="901">
+          <caret line="63" column="49" selection-start-line="63" selection-start-column="49" selection-end-line="63" selection-end-column="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/StarField.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="-777">
           <caret line="14" selection-start-line="14" selection-end-line="14" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -570,56 +471,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/tile/Asteroid.java">
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="62" lean-forward="true" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#784#785#0" expanded="true" />
-            <element signature="e#841#842#0" expanded="true" />
-            <element signature="e#875#876#0" expanded="true" />
-            <element signature="e#905#906#0" expanded="true" />
-            <element signature="e#903#904#0" expanded="true" />
-            <element signature="e#935#936#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="68" column="43" selection-start-line="68" selection-start-column="43" selection-end-line="68" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/Level.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="52" column="71" selection-start-line="52" selection-start-column="71" selection-end-line="52" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/level/AsteroidField.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Player.java">
+    <entry file="file://$PROJECT_DIR$/src/com/soyardee/elementaryGame/entity/mob/Mob.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
-          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -6,13 +6,10 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-//custom code
 import com.soyardee.elementaryGame.entity.mob.Player;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
 import com.soyardee.elementaryGame.level.AsteroidField;
-import com.soyardee.elementaryGame.level.Level;
-import com.soyardee.elementaryGame.level.RandomLevel;
 import com.soyardee.elementaryGame.level.StarField;
 
 
@@ -43,10 +40,9 @@ public class Game extends Canvas implements Runnable {
     private Keyboard keyMap;
 
     private Thread thread;                      //the game subprocess
-    private boolean running = false;            //watch out for global declaration
+    private boolean running = false;
 
     private Screen screen;
-    private Level level;
     private StarField stars;
     private AsteroidField asteroidField;
     private Player player;
@@ -64,9 +60,8 @@ public class Game extends Canvas implements Runnable {
         setPreferredSize(size);
 
         screen = new Screen(width, height);
-        level = new RandomLevel(64, 64);
         stars = new StarField(16);
-        asteroidField = new AsteroidField(20, 0.8f, screen);
+        asteroidField = new AsteroidField(20, 0.1f, screen);
 
         keyMap = new Keyboard();
         player = new Player(width/2 -16, height-32,keyMap,screen);
@@ -76,9 +71,9 @@ public class Game extends Canvas implements Runnable {
 
     //no overlaps in the call order
     public synchronized void start() {
-        //start running the game
+        //mark the game as running to enter the gameloop
         running = true;
-        //open the instance of the game in a new thread.
+        //open this instance of the game in a new thread.
         thread = new Thread(this, "Display");
         //boot up the thread into a new instance
         thread.start();
@@ -131,7 +126,7 @@ public class Game extends Canvas implements Runnable {
 
             if(System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
+                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount());
                 updates = 0;
                 frames = 0;
             }
@@ -145,7 +140,9 @@ public class Game extends Canvas implements Runnable {
         keyMap.update();
 
         //TODO update the game with all the mobs
-        player.update();
+        player.update(asteroidField);
+
+
     }
 
     public void render() {

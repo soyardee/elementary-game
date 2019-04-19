@@ -1,14 +1,12 @@
 package com.soyardee.elementaryGame.entity;
 
 import com.soyardee.elementaryGame.graphics.Screen;
-import com.soyardee.elementaryGame.level.Level;
 
 
 public class Entity {
 
     public int x, y;
     private boolean removed = false;
-    protected Level level;
 
     public void update() {
 
