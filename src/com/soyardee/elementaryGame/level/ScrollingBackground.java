@@ -35,33 +35,16 @@ public class ScrollingBackground {
 
     //load in a few different sprites from the provided sheet
 
-    public ScrollingBackground(int size, int x, int y, SpriteSheet sheet) {
-        this.SIZE = size;
-        this.x = x;
-        this.y = y;
-        this.sheet = sheet;
-        load();
-    }
 
     public ScrollingBackground(int size) {
         this.SIZE = size;
         this.x = 0;
         this.y = 0;
-        this.sheet = SpriteSheet.stars;
-        load();
         generateField(colorField, 16);
         generateField(starArrayOrder, SIZE);
     }
 
-    //load the specified segment of stars in from the file at the coordinate (x,y)
-    public void load(){
-        int bound = SpriteSheet.stars.SIZE / 16;
-        for(int y = 0; y<bound; y++){
-            for(int x = 0; x<bound; x++){
-                starArrayTiles[x + y*bound] = new Tile(new Sprite(this.SIZE, x, y, SpriteSheet.stars));
-            }
-        }
-    }
+
 
     //this works best when we can adapt to the size of the screen itself
     //it will work for now

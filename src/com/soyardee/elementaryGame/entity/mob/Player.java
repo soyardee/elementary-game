@@ -14,13 +14,11 @@ public class Player extends Mob {
     private Screen screen;
 
     private boolean upHold = false;
+    private boolean downHold = false;
+    private boolean requestQuestion = false;
 
     public int hitCount = 0;
     public int getCount = 0;
-
-    public Player (Keyboard input) {
-        this.input = input;
-    }
 
     public Player(int x, int y, Keyboard input, Screen screen) {
         this.x = x;
@@ -32,6 +30,7 @@ public class Player extends Mob {
     public void update(AsteroidField asteroidField, StarField starField, ParticleHandler particle) {
         int xa = 0, ya = 0;
 
+        requestQuestion = false;
 
         //the numbers are offset due to the border around the sprite
         if(input.left && x > -3) xa-=2;
@@ -40,8 +39,12 @@ public class Player extends Mob {
             particle.createParticle(x+15, y, 5, 10);
             upHold = true;
         }
+        if(input.down && !downHold) {
+            requestQuestion = true;
+            downHold = true;
+        }
         upHold = input.up;
-
+        downHold = input.down;
 
         if(asteroidField.isOverlap(x+8, y, 16, 32)) {
             hitCount++;
@@ -60,4 +63,5 @@ public class Player extends Mob {
 
     public int getHitCount() {return hitCount;}
     public int getGetCount() {return getCount;}
+    public boolean getRequestQuestion() {return requestQuestion;}
 }

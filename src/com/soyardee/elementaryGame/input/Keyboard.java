@@ -2,6 +2,8 @@ package com.soyardee.elementaryGame.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Keyboard implements KeyListener {
 
@@ -9,6 +11,7 @@ public class Keyboard implements KeyListener {
     public boolean up, down, left, right;
 
     public void update() {
+
         up = keys[KeyEvent.VK_UP];
         down = keys[KeyEvent.VK_DOWN];
         left = keys[KeyEvent.VK_LEFT];
@@ -16,9 +19,7 @@ public class Keyboard implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -28,6 +29,11 @@ public class Keyboard implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         keys[e.getKeyCode()] = false;
+
+    }
+
+    public void refresh() {
+        Arrays.fill(keys, false);
 
     }
 }

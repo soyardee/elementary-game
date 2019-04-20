@@ -15,6 +15,8 @@ import com.soyardee.elementaryGame.level.AsteroidField;
 import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
 import com.soyardee.questionParser.QuestionList;
+import com.soyardee.questionPrompt.PromptHandler;
+import com.soyardee.questionPrompt.PromptInterface;
 
 
 /*
@@ -33,7 +35,7 @@ public class Game extends Canvas implements Runnable {
     //simple tile animation
     //TODO remove class reference
 
-    private int updateRate = 60;
+    private final int updateRate = 60;
 
     private static int width = 300;
     private static int height = width / 16 * 9;
@@ -45,6 +47,7 @@ public class Game extends Canvas implements Runnable {
 
     private Thread thread;                      //the game subprocess
     private boolean running = false;
+    private boolean pause = false;
 
     private Screen screen;
     private ScrollingBackground scrollingBG;
@@ -53,6 +56,7 @@ public class Game extends Canvas implements Runnable {
     private ParticleHandler particles;
     private Player player;
     private QuestionList questionList;
+    private PromptHandler promptHandler;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -74,7 +78,7 @@ public class Game extends Canvas implements Runnable {
         starField = new StarField(2, 4*updateRate, 3*updateRate, screen);
         particles = new ParticleHandler();
         questionList = new QuestionList("/questions/questions.xml");
-        questionList.printQuestions();
+        promptHandler = new PromptHandler();
 
         keyMap = new Keyboard();
         player = new Player(width/2 -16, height-32,keyMap,screen);
@@ -123,26 +127,30 @@ public class Game extends Canvas implements Runnable {
         //(for keyboard/mouse input)
         frame.requestFocus();
 
+
         //the game loop itself
         while(running) {
-            long currentTime = System.nanoTime();
+            if(!promptHandler.isPaused()) {
+                long currentTime = System.nanoTime();
 
-            delta += (currentTime - lastTime) / nano;
-            lastTime = currentTime;
-            while (delta >= 1) {
-                update();
-                updates++;
-                delta--;
-            }
-            render();
-            frames++;
+                delta += (currentTime - lastTime) / nano;
+                lastTime = currentTime;
+                while (delta >= 1) {
+                    update();
+                    updates++;
+                    //delta--;
+                    delta = 0;
+                }
+                render();
+                frames++;
 
-            if(System.currentTimeMillis() - timer > 1000) {
-                timer += 1000;
-                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount()
-                + " | getcount: " + player.getGetCount());
-                updates = 0;
-                frames = 0;
+                if (System.currentTimeMillis() - timer > 1000) {
+                    timer += 1000;
+                    frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount()
+                            + " | getcount: " + player.getGetCount());
+                    updates = 0;
+                    frames = 0;
+                }
             }
         }
     }
@@ -152,11 +160,16 @@ public class Game extends Canvas implements Runnable {
         asteroidField.update();
         starField.update();
 
-        keyMap.update();
 
+        keyMap.update();
         //TODO update the game with all the mobs
         player.update(asteroidField, starField, particles);
         particles.update(asteroidField, starField);
+
+        if(player.getRequestQuestion()) {
+            promptHandler.openFrame();
+            keyMap.refresh();
+        }
 
 
     }
@@ -204,6 +217,9 @@ public class Game extends Canvas implements Runnable {
 
     }
 
+    public void setPause(boolean pause) {this.pause = pause;}
+
+
     //TODO DEFINITELY REFACTOR
     public static void main(String[] args) {
         Game game = new Game();
@@ -214,9 +230,7 @@ public class Game extends Canvas implements Runnable {
         game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game.frame.setLocationRelativeTo(null);
         game.frame.setVisible(true);
-
         game.start();
     }
-
 
 }

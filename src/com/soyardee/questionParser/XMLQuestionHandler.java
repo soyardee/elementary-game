@@ -15,13 +15,9 @@ public class XMLQuestionHandler extends DefaultHandler {
 
 
     //override the default start document method to do whatever
-    public void startDocument() throws SAXException {
-        System.out.println("begin reading xml");
-    }
+    public void startDocument() throws SAXException {}
 
-    public void endDocument() throws  SAXException {
-        System.out.println("xml parsing complete");
-    }
+    public void endDocument() throws  SAXException {}
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         //the list of elements in the stack

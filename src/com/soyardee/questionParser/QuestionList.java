@@ -5,13 +5,17 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QuestionList {
     private List<Question> questionList = new ArrayList<Question>();
 
+    private int currentQuestionIndex = 0;
+
     public QuestionList(String filename){
         readXML(filename);
+        Collections.shuffle(questionList);
     }
 
 
