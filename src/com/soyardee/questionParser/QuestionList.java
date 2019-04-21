@@ -19,7 +19,7 @@ public class QuestionList {
     }
 
 
-    public void readXML(String filename) {
+    private void readXML(String filename) {
         try{
             XMLQuestionHandler handler = new XMLQuestionHandler();
             XMLReader parser = XMLReaderFactory.createXMLReader();
@@ -38,5 +38,16 @@ public class QuestionList {
         for (Question q: questionList) {
             System.out.println(q);
         }
+    }
+
+    public Question getQuestion() {
+        if(questionList.size() == 0) return null;
+        if(currentQuestionIndex >= questionList.size()) {
+            Collections.shuffle(questionList);
+            currentQuestionIndex = 0;
+        }
+        Question out = questionList.get(currentQuestionIndex);
+        currentQuestionIndex++;
+        return out;
     }
 }

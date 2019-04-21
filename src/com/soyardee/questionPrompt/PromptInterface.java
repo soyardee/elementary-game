@@ -1,22 +1,30 @@
 package com.soyardee.questionPrompt;
 
+import com.soyardee.questionParser.Question;
+import com.soyardee.questionParser.QuestionList;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
+import java.util.Random;
 
 public class PromptInterface implements ActionListener {
 
-    JPanel pausePanel;
-    JButton resumeButton;
-    JFrame frame;
+    private Random random;
+
+    private JPanel pausePanel, buttonPanel, questionPanel, answerPanel;
+    private JButton[] buttonOptions;
+    private QuestionList questionList;
+    private Question question;
+    private String[] answerStrings;
+    private JFrame frame;
 
     //ayy learned how thread volatility works in swing
-    volatile boolean isClosed;
-
-    public String test = "some data here that has not been dereferenced yet";
+    private volatile boolean isClosed, correctAnswer, wrongAnswer;
 
 
-    ComponentListener componentListener = new ComponentAdapter() {
+    private ComponentListener componentListener = new ComponentAdapter() {
         @Override
         public void componentHidden(ComponentEvent e) {
             super.componentHidden(e);
@@ -24,15 +32,58 @@ public class PromptInterface implements ActionListener {
         }
     };
 
+
+
+
+    //TODO allow keyboard input to select option
     public void createWindow() {
-        frame = new JFrame();
         isClosed = false;
-        pausePanel = new JPanel(new FlowLayout());
-        resumeButton = new JButton("Resume");
-        resumeButton.addActionListener(this);
-        pausePanel.add(resumeButton);
+        correctAnswer = false;
+        wrongAnswer = false;
+        frame = new JFrame();
+
+
+        question = questionList.getQuestion();
+        answerStrings = question.getAnswers();
+        buttonOptions = new JButton[answerStrings.length];
+
+
+        pausePanel = new JPanel(new BorderLayout());
+        buttonPanel = new JPanel(new FlowLayout());
+
+
+        questionPanel = new JPanel(new FlowLayout());
+        JLabel prompt = new JLabel(question.getQuestionPrompt());
+
+        answerPanel = new JPanel(new GridLayout(answerStrings.length, 1));
+
+        //populate the panels
+
+        for(int i=0; i < answerStrings.length; i++) {
+            String currentLetter = Character.toString((char) (i+65));
+            JButton button = new JButton(currentLetter);
+            button.addActionListener(this);
+            buttonOptions[i] = button;
+            buttonPanel.add(buttonOptions[i]);
+
+            JLabel answer = new JLabel(currentLetter + ": " + answerStrings[i]);
+            JPanel answerPanelFlow = new JPanel(new FlowLayout());
+
+            answerPanelFlow.add(answer);
+
+            answerPanel.add(answerPanelFlow);
+        }
+
+
+
+        questionPanel.add(prompt);
+        pausePanel.add(questionPanel, BorderLayout.NORTH);
+        pausePanel.add(answerPanel, BorderLayout.CENTER);
+        pausePanel.add(buttonPanel, BorderLayout.SOUTH);
         frame.add(pausePanel);
-        frame.setPreferredSize(new Dimension(200, 100));
+
+        frame.setTitle("Reload");
+        frame.setPreferredSize(new Dimension(250, 200));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -41,20 +92,55 @@ public class PromptInterface implements ActionListener {
     }
 
 
-    public PromptInterface() {
+
+    public PromptInterface(QuestionList list) {
+        this.questionList = list;
+        this.random = new Random();
         frame = null;
         isClosed = false;
     }
 
+    private boolean checkAnswer(int index) {
+        if(!wrongAnswer) {
+            correctAnswer = answerStrings[index].equals(question.getCorrectAnswer());
+        }
+
+        return answerStrings[index].equals(question.getCorrectAnswer());
+    }
+
+    private void disableButtons(JButton[] buttons, int correctIndex) {
+        for(int i = 0; i < buttons.length; i++) {
+            if(i != correctIndex) {
+                buttons[i].setEnabled(false);
+            }
+        }
+    }
+
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object event = e.getSource();
-        if(event == resumeButton) {
-            frame.setVisible(false);
+        if(e.getSource() instanceof JButton) {
+            int i = 0;
+            while(i < buttonOptions.length) {
+                if (e.getSource() == buttonOptions[i]){
+                    break;
+                }
+                i++;
+            }
+            if(checkAnswer(i)) {
+                frame.setVisible(false);
+            }
+            else{
+                disableButtons(buttonOptions, Arrays.asList(answerStrings).indexOf(question.getCorrectAnswer()));
+                wrongAnswer = true;
+            }
         }
     }
 
     public boolean isClosed() {return isClosed;}
+    public boolean isCorrectAnswer() {return correctAnswer;}
 
     public void clear() {
         frame = null;

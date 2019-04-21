@@ -1,5 +1,7 @@
 package com.soyardee.questionPrompt;
 
+import com.soyardee.questionParser.QuestionList;
+
 /**
  * This class runs on the main game thread, NOT the swing thread.
  * There was some confusion with the multithreaded architecture of the game
@@ -30,13 +32,15 @@ public class PromptHandler {
 
     PromptInterface prompt;
 
-    public PromptHandler() {
+    public PromptHandler(QuestionList list) {
         pause = false;
-        prompt = new PromptInterface();
+        correctAnswer = false;
+        prompt = new PromptInterface(list);
     }
 
     public void openFrame() {
         pause = true;
+        correctAnswer = false;
         prompt.createWindow();
     }
 
@@ -44,6 +48,7 @@ public class PromptHandler {
         if(prompt.getFrame() != null){
             if(prompt.isClosed()) {
                 pause = false;
+                correctAnswer = prompt.isCorrectAnswer();
                 prompt.clear();
             }
         }
@@ -52,5 +57,11 @@ public class PromptHandler {
     public boolean isPaused() {
         update();
         return pause;
+    }
+
+    public boolean isCorrectAnswer() {
+        boolean out = correctAnswer;
+        correctAnswer = false;
+        return out;
     }
 }

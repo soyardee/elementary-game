@@ -17,14 +17,23 @@ public class Player extends Mob {
     private boolean downHold = false;
     private boolean requestQuestion = false;
 
+    private int maxFireCount;
+    public int fireCount;
+
     public int hitCount = 0;
     public int getCount = 0;
 
-    public Player(int x, int y, Keyboard input, Screen screen) {
+    public Player(int x, int y, int maxFireCount, Keyboard input, Screen screen) {
         this.x = x;
         this.y = y;
         this.input = input;
         this.screen = screen;
+        this.fireCount = 0;
+        this.maxFireCount = maxFireCount;
+    }
+
+    public void reload() {
+        this.fireCount = maxFireCount;
     }
 
     public void update(AsteroidField asteroidField, StarField starField, ParticleHandler particle) {
@@ -35,8 +44,9 @@ public class Player extends Mob {
         //the numbers are offset due to the border around the sprite
         if(input.left && x > -3) xa-=2;
         if(input.right && x+29 < screen.width) xa+=2;
-        if(input.up && !upHold) {
+        if(input.up && !upHold && fireCount > 0) {
             particle.createParticle(x+15, y, 5, 10);
+            fireCount--;
             upHold = true;
         }
         if(input.down && !downHold) {
@@ -63,5 +73,7 @@ public class Player extends Mob {
 
     public int getHitCount() {return hitCount;}
     public int getGetCount() {return getCount;}
+    public int getFireCount() {return fireCount;}
+    public int getMaxFireCount() {return maxFireCount;}
     public boolean getRequestQuestion() {return requestQuestion;}
 }

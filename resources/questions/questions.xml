@@ -1,6 +1,14 @@
-<question>
-	<prompt>2 + _ = 5</prompt>
-	<correct>3</correct>
-	<alt>1</alt>
-	<alt>5</alt>
-</question>
+<questions>
+	<question>
+		<prompt>2 + _ = 5</prompt>
+		<correct>3</correct>
+		<alt>1</alt>
+		<alt>5</alt>
+	</question>
+	<question>
+		<prompt>1 + _ = 2</prompt>
+		<correct>1</correct>
+		<alt>0</alt>
+		<alt>3</alt>
+	</question>
+</questions>

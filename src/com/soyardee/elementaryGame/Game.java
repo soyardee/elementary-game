@@ -78,10 +78,10 @@ public class Game extends Canvas implements Runnable {
         starField = new StarField(2, 4*updateRate, 3*updateRate, screen);
         particles = new ParticleHandler();
         questionList = new QuestionList("/questions/questions.xml");
-        promptHandler = new PromptHandler();
+        promptHandler = new PromptHandler(questionList);
 
         keyMap = new Keyboard();
-        player = new Player(width/2 -16, height-32,keyMap,screen);
+        player = new Player(width/2 -16, height-32, 5, keyMap,screen);
         frame = new JFrame();
         frame.addKeyListener(keyMap);
     }
@@ -171,7 +171,9 @@ public class Game extends Canvas implements Runnable {
             keyMap.refresh();
         }
 
-
+        if(promptHandler.isCorrectAnswer()) {
+            player.reload();
+        }
     }
 
     public void render() {
@@ -185,10 +187,6 @@ public class Game extends Canvas implements Runnable {
 
         //reset the screen calculations this frame
         screen.clear();
-
-        //center the player sprite into the center of the screen
-        int xScroll = player.x - screen.width / 2;
-        int yScroll = player.y - screen.height / 2;
 
         //calculate the relations of the tiles and entities to the actual screen
         //level.render(xScroll, yScroll, screen);
@@ -216,8 +214,6 @@ public class Game extends Canvas implements Runnable {
         bs.show();
 
     }
-
-    public void setPause(boolean pause) {this.pause = pause;}
 
 
     //TODO DEFINITELY REFACTOR

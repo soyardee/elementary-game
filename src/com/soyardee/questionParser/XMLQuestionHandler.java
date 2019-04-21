@@ -47,6 +47,7 @@ public class XMLQuestionHandler extends DefaultHandler {
         else if("correct".equals(currentElement())) {
             Question q = questionStack.peek();
             q.setCorrectAnswer(value);
+            q.addAnswer(value);
         }
         else if("alt".equals(currentElement())) {
             Question q = questionStack.peek();
