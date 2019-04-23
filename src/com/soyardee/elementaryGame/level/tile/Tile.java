@@ -28,9 +28,9 @@ public class Tile {
         this.sprite = sprite;
     }
 
-    public void update(Screen screen) {
+    public void update(int screenHeight) {
         y += speed;
-        discard = y > screen.height;
+        discard = y > screenHeight;
         isBelowTop = y > 0;
     }
 
@@ -56,9 +56,5 @@ public class Tile {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-    }
-
-    public boolean isSolid() {
-        return false;
     }
 }

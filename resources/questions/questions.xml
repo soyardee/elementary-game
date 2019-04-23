@@ -11,4 +11,24 @@
 		<alt>0</alt>
 		<alt>3</alt>
 	</question>
+	<question>
+		<prompt>_ + 10 = 15</prompt>
+		<correct>5</correct>
+		<alt>6</alt>
+		<alt>15</alt>
+		<alt>3</alt>
+	</question>
+	<question>
+		<prompt>7 + _ = 14</prompt>
+		<correct>7</correct>
+		<alt>6</alt>
+		<alt>10</alt>
+		<alt>9</alt>
+	</question>
+	<question>
+		<prompt>Who was the first president of the US?</prompt>
+		<correct>George Washington</correct>
+		<alt>Abraham Lincoln</alt>
+		<alt>John Adams</alt>
+	</question>
 </questions>

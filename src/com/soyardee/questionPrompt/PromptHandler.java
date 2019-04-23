@@ -19,8 +19,7 @@ import com.soyardee.questionParser.QuestionList;
  *
  * Turns out, the print statement actually synchronizes all threads when it's called.
  * This means the isClosed variable must read the same across both threads. Today I learned
- * about system multithreading and unsafe thread operations in swing. Java does not handle
- * this well at all.
+ * about system multithreading and unsafe thread operations in swing.
  */
 
 public class PromptHandler {

@@ -9,6 +9,16 @@ import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Not a huge fan of this system. This detracts from the gameplay as the user has to take their
+ * hands off the keyboard to click the correct answer. The game will immediately resume, and it can
+ * be difficult to properly transition back to the game. Not to mention that the question window
+ * pops up immediately in a separate thread, causing the player to become confused.
+ *
+ * TODO make this a part of the game interface. Feeling cute, might delete later.
+ */
+
+
 public class PromptInterface implements ActionListener {
 
     private Random random;

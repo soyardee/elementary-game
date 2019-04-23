@@ -34,6 +34,7 @@ public class QuestionList {
         }
     }
 
+    //debug
     public void printQuestions() {
         for (Question q: questionList) {
             System.out.println(q);

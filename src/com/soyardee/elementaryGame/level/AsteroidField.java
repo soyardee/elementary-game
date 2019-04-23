@@ -33,7 +33,7 @@ public class AsteroidField {
 
 
         for(Asteroid a: asteroidArrayList) {
-            a.update(screen);
+            a.update(screen.height);
             allowNewAsteroid = a.isBelowTop();
         }
 
@@ -70,7 +70,7 @@ public class AsteroidField {
                     && rectOneTop < rectTwoBottom;
 
             if(intersects && a.isVisible()) {
-                //destroy animation
+                //destroy animation here
                 a.setVisible(false);
                 return true;
             }

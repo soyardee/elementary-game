@@ -21,20 +21,19 @@ import com.soyardee.questionPrompt.PromptInterface;
 
 /*
  * The base engine code is done with assistance from TheChernoProject's java game programming
- * series where noted. Otherwise, all game design was by me.
+ * series where noted. (threads, custom screen class, and tile handling).
+ * Otherwise, all game design was by me.
  * This program is in no way sufficiently advanced or optimized, but requires no additional
  * dependencies.
  *
  * If I had a few months, I'd consider learning the LWJGL API to create low level access calls to OpenGL for
- * far better performance.
+ * far better performance if I were to program in java at all :P
  */
 
 public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
 
-    //simple tile animation
-    //TODO remove class reference
-
+    //the tick rate of the game
     private final int updateRate = 60;
 
     private static int width = 300;
@@ -47,7 +46,6 @@ public class Game extends Canvas implements Runnable {
 
     private Thread thread;                      //the game subprocess
     private boolean running = false;
-    private boolean pause = false;
 
     private Screen screen;
     private ScrollingBackground scrollingBG;
@@ -75,7 +73,7 @@ public class Game extends Canvas implements Runnable {
 
         //TODO put these things into the level class
         asteroidField = new AsteroidField(20, 0.1f, screen);
-        starField = new StarField(2, 4*updateRate, 3*updateRate, screen);
+        starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
         particles = new ParticleHandler();
         questionList = new QuestionList("/questions/questions.xml");
         promptHandler = new PromptHandler(questionList);
@@ -84,6 +82,13 @@ public class Game extends Canvas implements Runnable {
         player = new Player(width/2 -16, height-32, 5, keyMap,screen);
         frame = new JFrame();
         frame.addKeyListener(keyMap);
+        frame.setResizable(true);
+        frame.setTitle("Test Game");
+        frame.add(this);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     //no overlaps in the call order
@@ -148,6 +153,8 @@ public class Game extends Canvas implements Runnable {
                     timer += 1000;
                     frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount()
                             + " | getcount: " + player.getGetCount());
+                    //fixes the bug where the user clicks away from the window when the question prompt is active
+                    frame.requestFocus();
                     updates = 0;
                     frames = 0;
                 }
@@ -189,7 +196,6 @@ public class Game extends Canvas implements Runnable {
         screen.clear();
 
         //calculate the relations of the tiles and entities to the actual screen
-        //level.render(xScroll, yScroll, screen);
         scrollingBG.render(screen);
         starField.render(screen);
         asteroidField.render(screen);
@@ -214,19 +220,4 @@ public class Game extends Canvas implements Runnable {
         bs.show();
 
     }
-
-
-    //TODO DEFINITELY REFACTOR
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.frame.setResizable(false);
-        game.frame.setTitle("Test Game");
-        game.frame.add(game);
-        game.frame.pack();
-        game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        game.frame.setLocationRelativeTo(null);
-        game.frame.setVisible(true);
-        game.start();
-    }
-
 }

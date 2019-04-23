@@ -10,20 +10,21 @@ import java.util.Random;
 public class StarField {
 
     private ArrayList<Star> starArrayList;
-    private Screen screen;
     public int maxOnScreen;
     private int maxSpawnTime;
     private int minSpawnTime;
     private int randomSpawnTime;
     private int currentSpawnTime;
+    private int screenWidth, screenHeight;
     private Random random;
 
-    public StarField(int maxOnScreen, int maxSpawnTime, int minSpawnTime, Screen screen) {
+    public StarField(int maxOnScreen, int maxSpawnTime, int minSpawnTime, int screenWidth, int screenHeight) {
         starArrayList = new ArrayList<>();
         this.maxOnScreen = maxOnScreen;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
         this.maxSpawnTime = maxSpawnTime;
         this.minSpawnTime = minSpawnTime;
-        this.screen = screen;
         random = new Random();
         randomSpawnTime = random.nextInt(maxSpawnTime-minSpawnTime) + minSpawnTime;
         currentSpawnTime = 0;
@@ -33,14 +34,14 @@ public class StarField {
     public void update() {
 
         for (Star s: starArrayList) {
-            s.update(screen);
+            s.update(screenHeight);
         }
 
         if(starArrayList.size() < maxOnScreen) {
 
             if (currentSpawnTime >= randomSpawnTime) {
                 //add a new star
-                int xStart = random.nextInt(screen.width/16);
+                int xStart = random.nextInt(screenWidth/16);
                 starArrayList.add(new Star(xStart, -16, Sprite.starLocked));
 
                 currentSpawnTime = 0;

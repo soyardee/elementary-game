@@ -1,0 +1,108 @@
+@startuml
+
+
+
+package com.soyardee {
+    package elementaryGame {
+        class Game
+        class Main
+
+        Main -- Game
+
+
+
+
+        package graphics {
+            class Screen
+            class Sprite
+            class SpriteSheet
+
+            Game - Screen
+
+            Sprite --> SpriteSheet
+        }
+
+        package input {
+            class Keyboard
+        }
+
+        package level {
+
+            package tile {
+                class Tile
+                class Star
+                class Asteroid
+
+                Star --|> Tile
+                Asteroid --|> Tile
+
+                Tile -- Sprite
+            }
+
+
+            class AsteroidField
+            class StarField
+            class ScrollingBackground
+
+            AsteroidField ---> Asteroid
+            StarField ---> Star
+
+            Game -- AsteroidField
+            Game -- ScrollingBackground
+            Game -- StarField
+        }
+
+        package entity {
+            class Entity
+
+            package mob {
+                abstract Mob
+                class Player
+
+                Mob --- Sprite
+
+                Player --|> Mob
+            }
+
+            Mob -|> Entity
+
+
+            package particle {
+                class Particle
+
+                Particle --|> Entity
+                Particle -- Sprite
+
+                class ParticleHandler
+
+                ParticleHandler --> Particle
+            }
+        }
+
+        Game -- Player
+        Game -- ParticleHandler
+        Game -- Keyboard
+    }
+
+    package questionPrompt {
+        class PromptHandler
+        class PromptInterface
+
+        PromptInterface -- PromptHandler
+
+        PromptHandler -- Game
+    }
+
+    package questionParser {
+        class Question
+        class QuestionList
+        class XMLQuestionHandler
+
+        QuestionList --> Question
+        XMLQuestionHandler - QuestionList
+
+        QuestionList - PromptInterface
+    }
+}
+
+@enduml
