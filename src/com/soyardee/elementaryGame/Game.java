@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import com.soyardee.elementaryGame.entity.mob.Player;
-import com.soyardee.elementaryGame.entity.particle.Particle;
 import com.soyardee.elementaryGame.entity.particle.ParticleHandler;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.input.Keyboard;
@@ -16,7 +15,6 @@ import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
 import com.soyardee.questionParser.QuestionList;
 import com.soyardee.questionPrompt.PromptHandler;
-import com.soyardee.questionPrompt.PromptInterface;
 
 
 /*
@@ -40,12 +38,16 @@ public class Game extends Canvas implements Runnable {
     private static int height = width / 16 * 9;
     private static int scale = 3;                //the multiplier for the upscaled resolution
 
+
+    private int timeMax, currentTimeGlobal, pointsThreshold;
+
     private static String titleString = "Test Game";
 
     private Keyboard keyMap;
 
     private Thread thread;                      //the game subprocess
     private boolean running = false;
+    private boolean pause = false;
 
     private Screen screen;
     private ScrollingBackground scrollingBG;
@@ -64,7 +66,12 @@ public class Game extends Canvas implements Runnable {
     //Interface elements
     private JFrame frame;
 
+    public Game(int score) {
+
+    }
+
     public Game() {
+        //example of a level 1 generation of the game
         Dimension size = new Dimension(width*scale, height*scale);
         setPreferredSize(size);
 
@@ -77,9 +84,12 @@ public class Game extends Canvas implements Runnable {
         particles = new ParticleHandler();
         questionList = new QuestionList("/questions/questions.xml");
         promptHandler = new PromptHandler(questionList);
+        timeMax = 60;
+        currentTimeGlobal = timeMax;
+        pointsThreshold = 10;
 
         keyMap = new Keyboard();
-        player = new Player(width/2 -16, height-32, 5, keyMap,screen);
+        player = new Player(width/2 -16, height-32, 10, 5, keyMap,screen);
         frame = new JFrame();
         frame.addKeyListener(keyMap);
         frame.setResizable(true);
@@ -132,10 +142,12 @@ public class Game extends Canvas implements Runnable {
         //(for keyboard/mouse input)
         frame.requestFocus();
 
+        boolean promptPause = false;
+
 
         //the game loop itself
         while(running) {
-            if(!promptHandler.isPaused()) {
+            if(!promptPause && !pause) {
                 long currentTime = System.nanoTime();
 
                 delta += (currentTime - lastTime) / nano;
@@ -150,17 +162,21 @@ public class Game extends Canvas implements Runnable {
                 frames++;
 
                 if (System.currentTimeMillis() - timer > 1000) {
-                    timer += 1000;
-                    frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps  | hitcount: " + player.getHitCount()
-                            + " | getcount: " + player.getGetCount());
+                    timer = System.currentTimeMillis();
+                    currentTimeGlobal--;
+                    frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
                     //fixes the bug where the user clicks away from the window when the question prompt is active
+                    //also apparently bugs the user when it isn't focused. hmm.
+                    //TODO ADD TIMER
                     frame.requestFocus();
                     updates = 0;
                     frames = 0;
                 }
             }
+            promptPause = promptHandler.isPaused();
         }
     }
+
 
     public void update() {
         scrollingBG.update();
@@ -171,7 +187,7 @@ public class Game extends Canvas implements Runnable {
         keyMap.update();
         //TODO update the game with all the mobs
         player.update(asteroidField, starField, particles);
-        particles.update(asteroidField, starField);
+        particles.update(asteroidField, starField, player);
 
         if(player.getRequestQuestion()) {
             promptHandler.openFrame();
@@ -181,6 +197,21 @@ public class Game extends Canvas implements Runnable {
         if(promptHandler.isCorrectAnswer()) {
             player.reload();
         }
+
+        //end the game after the timer counts down
+        if(currentTimeGlobal <= 0) {
+            if (player.getGetCount() >= pointsThreshold)
+                System.out.println("you win");
+            else
+                System.out.println("not enough points");
+            pause = true;
+        }
+
+        if(player.getHP() <= 0) {
+            pause = true;
+            System.out.println("ran out of health");
+        }
+
     }
 
     public void render() {
@@ -213,11 +244,33 @@ public class Game extends Canvas implements Runnable {
         //access the BufferedImage's pixel map and format it to the size of the screen
         g.drawImage(image, 0,0, getWidth(), getHeight(), null);
 
+        //works but has a 10% performance hit each line :(
+        //also we can't easily set the location of this in the game space.
+        renderStringOverlay(g);
+
         //clear the current graphics buffer from memory
         g.dispose();
 
         //blit the buffer to the screen (in case of multiple buffers this frame)
         bs.show();
+    }
 
+    private void renderStringOverlay(Graphics g) {
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.setColor(Color.white);
+
+        g.drawString("Points: " + player.getGetCount(), 0, 30);
+        g.drawString("Health: " + player.getHP() + "/" + player.getMaxHP() , 0, 60);
+        g.drawString("Shots : " + player.getFireCount() + "/" + player.getMaxFireCount(), 0, 90);
+        g.drawString("Time: " + currentTimeGlobal, 0, 120);
+    }
+
+    //level ranges from 1 to 3 for each level. Use the static game reference for clarity.
+    //when loading a new level, you can pass the previous score in to continue counting up
+    public void setLevel(int level, int score) {
+        switch(level) {
+            case 1:
+
+        }
     }
 }

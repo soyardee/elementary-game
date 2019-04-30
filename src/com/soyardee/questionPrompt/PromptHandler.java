@@ -24,12 +24,11 @@ import com.soyardee.questionParser.QuestionList;
 
 public class PromptHandler {
 
-    boolean pause;
-    boolean windowOpen;
-    boolean correctAnswer;
+    private boolean pause;
+    private boolean correctAnswer;
 
 
-    PromptInterface prompt;
+    private PromptInterface prompt;
 
     public PromptHandler(QuestionList list) {
         pause = false;

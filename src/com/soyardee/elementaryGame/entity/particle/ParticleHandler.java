@@ -1,5 +1,6 @@
 package com.soyardee.elementaryGame.entity.particle;
 
+import com.soyardee.elementaryGame.entity.mob.Player;
 import com.soyardee.elementaryGame.graphics.Screen;
 import com.soyardee.elementaryGame.graphics.Sprite;
 import com.soyardee.elementaryGame.level.AsteroidField;
@@ -11,14 +12,15 @@ import java.util.List;
 public class ParticleHandler {
     private List<Particle> particles = new ArrayList<>();
 
-    public void update(AsteroidField asteroidField, StarField starField) {
+    public void update(AsteroidField asteroidField, StarField starField, Player player) {
         for(Particle p : particles) {
             p.yy -= p.speed;
             boolean offScreen = p.yy < 0-p.sprite.SIZE;
             boolean asteroidFieldOverlap = asteroidField.isOverlap((int)p.xx, (int)p.yy, p.sprite.SIZE, p.sprite.SIZE);
             boolean starFieldOverlap = starField.isOverlapParticle((int)p.xx, (int)p.yy, p.sprite.SIZE, p.sprite.SIZE);
 
-            if(offScreen || asteroidFieldOverlap || starFieldOverlap){
+            if(offScreen || starFieldOverlap || asteroidFieldOverlap){
+                if(asteroidFieldOverlap) player.increaseGetCount(1);
                 p.setRemoved();
             }
         }

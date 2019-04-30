@@ -9,6 +9,8 @@ import com.soyardee.elementaryGame.level.StarField;
 
 public class Player extends Mob {
 
+    private int MAX_HP = 20;
+
     private Keyboard input;
 
     private Screen screen;
@@ -19,21 +21,24 @@ public class Player extends Mob {
 
     private int maxFireCount;
     public int fireCount;
+    private int reloadCount, maxHP, currentHP;
 
-    public int hitCount = 0;
     public int getCount = 0;
 
-    public Player(int x, int y, int maxFireCount, Keyboard input, Screen screen) {
+    public Player(int x, int y, int maxFireCount, int reloadCount, Keyboard input, Screen screen) {
         this.x = x;
         this.y = y;
         this.input = input;
         this.screen = screen;
         this.fireCount = 0;
+        this.reloadCount = reloadCount;
         this.maxFireCount = maxFireCount;
+        this.maxHP = MAX_HP;
+        this.currentHP = MAX_HP;
     }
 
     public void reload() {
-        this.fireCount = maxFireCount;
+        fireCount = (fireCount + reloadCount > maxFireCount) ? maxFireCount : fireCount + reloadCount;
     }
 
     public void update(AsteroidField asteroidField, StarField starField, ParticleHandler particle) {
@@ -57,7 +62,7 @@ public class Player extends Mob {
         downHold = input.down;
 
         if(asteroidField.isOverlap(x+8, y, 16, 32)) {
-            hitCount++;
+            currentHP--;
         }
 
         if(starField.isOverlapPlayer(x, y, 32, 32)) {
@@ -71,9 +76,11 @@ public class Player extends Mob {
         screen.renderPlayer(x, y, Sprite.player0, 0xFFFF00FF);
     }
 
-    public int getHitCount() {return hitCount;}
+    public int getHP() {return currentHP;}
+    public int getMaxHP() {return maxHP;}
     public int getGetCount() {return getCount;}
     public int getFireCount() {return fireCount;}
     public int getMaxFireCount() {return maxFireCount;}
     public boolean getRequestQuestion() {return requestQuestion;}
+    public void increaseGetCount(int amount) { getCount += amount;}
 }
