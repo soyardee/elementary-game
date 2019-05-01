@@ -78,6 +78,7 @@ public class Player extends Mob {
 
     public int getHP() {return currentHP;}
     public int getMaxHP() {return maxHP;}
+    public void rechargeHP() {currentHP = maxHP;}
     public int getGetCount() {return getCount;}
     public int getFireCount() {return fireCount;}
     public int getMaxFireCount() {return maxFireCount;}

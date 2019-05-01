@@ -34,6 +34,8 @@ public class Game extends Canvas implements Runnable {
     //the tick rate of the game
     private final int updateRate = 60;
 
+    private int level = 0;
+
     private static int width = 300;
     private static int height = width / 16 * 9;
     private static int scale = 3;                //the multiplier for the upscaled resolution
@@ -66,30 +68,16 @@ public class Game extends Canvas implements Runnable {
     //Interface elements
     private JFrame frame;
 
-    public Game(int score) {
-
-    }
 
     public Game() {
-        //example of a level 1 generation of the game
         Dimension size = new Dimension(width*scale, height*scale);
         setPreferredSize(size);
-
         screen = new Screen(width, height);
-        scrollingBG = new ScrollingBackground(16);
-
-        //TODO put these things into the level class
-        asteroidField = new AsteroidField(20, 0.1f, screen);
-        starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
-        particles = new ParticleHandler();
-        questionList = new QuestionList("/questions/questions.xml");
-        promptHandler = new PromptHandler(questionList);
-        timeMax = 60;
-        currentTimeGlobal = timeMax;
-        pointsThreshold = 10;
-
         keyMap = new Keyboard();
-        player = new Player(width/2 -16, height-32, 10, 5, keyMap,screen);
+        setLevel(1);
+    }
+
+    private void initFrame() {
         frame = new JFrame();
         frame.addKeyListener(keyMap);
         frame.setResizable(true);
@@ -112,19 +100,23 @@ public class Game extends Canvas implements Runnable {
     }
 
     //kill the thread instance
+    //required for the runnable interface
     public synchronized void stop() {
         //stop the game loop when the stop command is called
         running = false;
-        try {
-            thread.join();
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if(thread != null) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     //the code executed when the game starts
     public void run() {
+        initFrame();
         //get the precise time since the game start
         long lastTime = System.nanoTime();
 
@@ -155,7 +147,6 @@ public class Game extends Canvas implements Runnable {
                 while (delta >= 1) {
                     update();
                     updates++;
-                    //delta--;
                     delta = 0;
                 }
                 render();
@@ -199,20 +190,11 @@ public class Game extends Canvas implements Runnable {
         }
 
         //end the game after the timer counts down
-        if(currentTimeGlobal <= 0) {
-            if (player.getGetCount() >= pointsThreshold)
-                System.out.println("you win");
-            else
-                System.out.println("not enough points");
-            pause = true;
-        }
-
-        if(player.getHP() <= 0) {
-            pause = true;
-            System.out.println("ran out of health");
-        }
+        checkWinCondition();
 
     }
+
+
 
     public void render() {
         //get the parent buffering type from the awt canvas
@@ -265,12 +247,113 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Time: " + currentTimeGlobal, 0, 120);
     }
 
+    private void checkWinCondition() {
+        if(currentTimeGlobal <= 0) {
+            pause = true;
+            if (player.getGetCount() >= pointsThreshold) {
+                endGameWin();
+            }
+            else
+                endGame();
+        }
+
+        if(player.getHP() <= 0) {
+            pause = true;
+            endGame();
+        }
+    }
+
+    //if the lose condition is met (or game is beaten), do this
+    private void endGame() {
+        JOptionPane.showMessageDialog(this, "Game Over");
+        //enter hi score
+        int replayOption = JOptionPane.showConfirmDialog(this, "replay?");
+        if(replayOption == JOptionPane.YES_OPTION) {
+            reset();
+            setLevel(level);
+        }
+        else {
+            System.exit(0);
+        }
+
+    }
+
+    //if the win condition on a lower lever is met, do this
+    private void endGameWin() {
+        if(level < 3) {
+            level++;
+            JOptionPane.showMessageDialog(this, "Points met, advancing to level " + level);
+            setLevel(level);
+        }
+        else if(level == 3) {
+            JOptionPane.showMessageDialog(this, "You made it through all three levels! Good job!");
+        }
+        else {
+            endGame();
+        }
+    }
+
     //level ranges from 1 to 3 for each level. Use the static game reference for clarity.
     //when loading a new level, you can pass the previous score in to continue counting up
-    public void setLevel(int level, int score) {
+    public void setLevel(int level) {
+        this.level = level;
+
+        pause = false;
+
+        if(player == null) {
+
+            player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
+        }
+
+        player.rechargeHP();
+        keyMap.refresh();
+
+        //I know, a really bad way to implement level loading :(
         switch(level) {
             case 1:
+                timeMax = 30;
+                currentTimeGlobal = timeMax;
+                pointsThreshold = 10;
+                scrollingBG = new ScrollingBackground(16, ScrollingBackground.BLUE);
+                asteroidField = new AsteroidField(20, 0.1f, screen);
+                starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
+                particles = new ParticleHandler();
+                questionList = new QuestionList("/questions/questions.xml");
+                promptHandler = new PromptHandler(questionList);
+                break;
 
+            case 2:
+                timeMax = 60;
+                currentTimeGlobal = timeMax;
+                pointsThreshold = 10;
+                scrollingBG = new ScrollingBackground(16, ScrollingBackground.GREEN);
+                asteroidField = new AsteroidField(20, 0.1f, screen);
+                starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
+                particles = new ParticleHandler();
+                questionList = new QuestionList("/questions/questions.xml");
+                promptHandler = new PromptHandler(questionList);
+                break;
+
+            case 3:
+                timeMax = 60;
+                currentTimeGlobal = timeMax;
+                pointsThreshold = 10;
+                scrollingBG = new ScrollingBackground(16, ScrollingBackground.RED);
+                asteroidField = new AsteroidField(20, 0.1f, screen);
+                starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
+                particles = new ParticleHandler();
+                questionList = new QuestionList("/questions/questions.xml");
+                promptHandler = new PromptHandler(questionList);
+                break;
+
+            default:
+                System.err.println("not a valid level number");
+                break;
         }
+    }
+
+    public void reset() {
+        player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
+        level = 1;
     }
 }

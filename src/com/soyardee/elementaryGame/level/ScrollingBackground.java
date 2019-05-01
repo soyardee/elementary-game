@@ -12,45 +12,34 @@ import com.soyardee.elementaryGame.level.tile.Tile;
 import java.util.Random;
 
 public class ScrollingBackground {
-
-    // a value of 0 (black) is ignored when called in the screen render method.
-    public SpriteSheet sheet;
     public int x,y;
     public final int SIZE;
     private int yOffset = 0;
-    private int xOffset = 0;
     private Random random = new Random();
 
+    public final static int BLUE = 0;
+    public final static int GREEN = 1;
+    public final static int RED = 2;
+
     //representative of the size of the screen in tile size
-    //TODO actually grab the size of the screen
-    private int height = 20;
-    private int width = 20;
+    //TODO must be at least 16x16 I'm so sorry. Requires fix in the screen class.
+    private int height = 16;
+    private int width = 16;
 
     private int[] colorField = new int[height * width];
-    private int[] starArrayOrder = new int[height * width];
 
-    //starfield tiles in order
-    public static Tile[] starArrayTiles = new Tile[(SpriteSheet.stars.SIZE * SpriteSheet.stars.SIZE) / 16];
-
-
-    //load in a few different sprites from the provided sheet
-
-
-    public ScrollingBackground(int size) {
+    public ScrollingBackground(int size, int color) {
         this.SIZE = size;
         this.x = 0;
         this.y = 0;
-        generateField(colorField, 16);
-        generateField(starArrayOrder, SIZE);
+        generateField(colorField, 16, color);
     }
-
-
 
     //this works best when we can adapt to the size of the screen itself
     //it will work for now
-    private void generateField(int[] arr, int bound){
-        for(int i = 0; i<starArrayOrder.length; i++){
-            arr[i] = random.nextInt(bound);
+    private void generateField(int[] arr, int bound, int startColor){
+        for(int i = 0; i<arr.length; i++){
+            arr[i] = random.nextInt(bound) << (startColor * 8);
         }
     }
 
@@ -60,19 +49,5 @@ public class ScrollingBackground {
 
     public void render(Screen screen) {
         screen.renderField(x, yOffset, colorField);
-
-        //pick out the tiles from the tiles storage class from the int array
-        //screen.renderTileLoop(x, yOffset, starArrayOrder, 0xff000000);
     }
-
-    public Tile getTile(int x, int y) {
-        return starArrayTiles[starArrayOrder[x + y * height]];
-    }
-
-    public Tile getTile(int x) {
-        return starArrayTiles[starArrayOrder[x]];
-    }
-
-
-
 }
