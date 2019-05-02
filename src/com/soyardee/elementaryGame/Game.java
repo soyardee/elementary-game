@@ -74,6 +74,7 @@ public class Game extends Canvas implements Runnable {
         setPreferredSize(size);
         screen = new Screen(width, height);
         keyMap = new Keyboard();
+
         setLevel(1);
     }
 
@@ -156,9 +157,9 @@ public class Game extends Canvas implements Runnable {
                     timer = System.currentTimeMillis();
                     currentTimeGlobal--;
                     frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
+
                     //fixes the bug where the user clicks away from the window when the question prompt is active
                     //also apparently bugs the user when it isn't focused. hmm.
-                    //TODO ADD TIMER
                     frame.requestFocus();
                     updates = 0;
                     frames = 0;
@@ -173,13 +174,20 @@ public class Game extends Canvas implements Runnable {
         scrollingBG.update();
         asteroidField.update();
         starField.update();
-
-
         keyMap.update();
-        //TODO update the game with all the mobs
+
+        //looks a bit ugly, but I did not place an object reference into the collision handling
+        //upon construction
         player.update(asteroidField, starField, particles);
         particles.update(asteroidField, starField, player);
 
+        questionUpdate();
+
+        //this runs when the timer ticks to 0
+        checkWinCondition();
+    }
+
+    private void questionUpdate() {
         if(player.getRequestQuestion()) {
             promptHandler.openFrame();
             keyMap.refresh();
@@ -188,10 +196,6 @@ public class Game extends Canvas implements Runnable {
         if(promptHandler.isCorrectAnswer()) {
             player.reload();
         }
-
-        //end the game after the timer counts down
-        checkWinCondition();
-
     }
 
 
@@ -244,7 +248,7 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Points: " + player.getGetCount(), 0, 30);
         g.drawString("Health: " + player.getHP() + "/" + player.getMaxHP() , 0, 60);
         g.drawString("Shots : " + player.getFireCount() + "/" + player.getMaxFireCount(), 0, 90);
-        g.drawString("Time: " + currentTimeGlobal, 0, 120);
+        g.drawString("Time  : " + currentTimeGlobal, 0, 120);
     }
 
     private void checkWinCondition() {
@@ -282,11 +286,12 @@ public class Game extends Canvas implements Runnable {
     private void endGameWin() {
         if(level < 3) {
             level++;
-            JOptionPane.showMessageDialog(this, "Points met, advancing to level " + level);
+            JOptionPane.showMessageDialog(this, "Point goal met, advancing to level " + level);
             setLevel(level);
         }
         else if(level == 3) {
             JOptionPane.showMessageDialog(this, "You made it through all three levels! Good job!");
+            endGame();
         }
         else {
             endGame();
@@ -301,7 +306,6 @@ public class Game extends Canvas implements Runnable {
         pause = false;
 
         if(player == null) {
-
             player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         }
 
@@ -309,6 +313,8 @@ public class Game extends Canvas implements Runnable {
         keyMap.refresh();
 
         //I know, a really bad way to implement level loading :(
+        //unsure how to proceed with storing the data, and this is horribly not scalable.
+        //Will work for a second grade learning game though.
         switch(level) {
             case 1:
                 timeMax = 30;
@@ -335,7 +341,7 @@ public class Game extends Canvas implements Runnable {
                 break;
 
             case 3:
-                timeMax = 60;
+                timeMax = 5;
                 currentTimeGlobal = timeMax;
                 pointsThreshold = 10;
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.RED);
@@ -352,7 +358,7 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public void reset() {
+    private void reset() {
         player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         level = 1;
     }
