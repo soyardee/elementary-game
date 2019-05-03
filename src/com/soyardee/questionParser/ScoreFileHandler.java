@@ -21,7 +21,6 @@ import java.util.PriorityQueue;
 public class ScoreFileHandler {
 
     //WARNING Overwrites previous file with the current heap every time. Does not smartly add to the file.
-    //TODO only add one entry in order instead of overwriting the file
     public static void writeOut(PriorityQueue<Score> list, String filename) {
         try{
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -56,7 +55,7 @@ public class ScoreFileHandler {
             DOMSource source = new DOMSource(doc);
 
             //TODO make the file a relative location, or at least not the same directory as the jar
-            File outputFile = new File("scores.xml");
+            File outputFile = new File(filename);
             StreamResult result = new StreamResult(outputFile);
 
             //looks like transformers map a DOM xml file in memory to a file stream location. Makes sense.
@@ -76,10 +75,9 @@ public class ScoreFileHandler {
             InputSource source = new InputSource(filepath);
             parser.parse(source);
             heap = handler.getScoreHeap();
-
         }
         catch(Exception e) {
-            e.printStackTrace();
+            System.err.println("cannot read " + filepath);
         }
         return heap;
     }

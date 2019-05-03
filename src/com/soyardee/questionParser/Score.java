@@ -15,16 +15,19 @@ public class Score implements Comparable {
         this.score = score;
     }
 
+    //TODO order scores so that the newest goes to the top.
     @Override
     public int compareTo(Object o) {
         Score other = (Score) o;
-        if(this.score >= other.getScore()) return 1;
+        if(this.score > other.getScore()) return 1;
         else return -1;
     }
 
+    //technically not the best way of doing it, if this were for real I would probably search for a UUID reference.
+    //somebody could have the same score and name.
     public boolean equals(Object o) {
         Score other = (Score) o;
-        return other.getName().equals(this.name);
+        return other.getName().equals(this.name) && other.getScore() == this.score;
     }
 
     public String getName() {return name;}

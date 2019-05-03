@@ -47,7 +47,6 @@ public class XMLScoreHandler extends DefaultHandler {
         if("name".equals(currentElement())) {
             Score s = scoreStack.peek();
             s.setName(value);
-            System.out.println(s.getName() + ", " + s.getScore());
         }
     }
 

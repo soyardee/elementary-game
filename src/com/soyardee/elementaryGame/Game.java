@@ -14,7 +14,9 @@ import com.soyardee.elementaryGame.level.AsteroidField;
 import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
 import com.soyardee.questionParser.QuestionList;
+import com.soyardee.questionParser.ScoreList;
 import com.soyardee.questionPrompt.PromptHandler;
+import com.soyardee.questionPrompt.ScorePrompt;
 
 
 /*
@@ -58,6 +60,7 @@ public class Game extends Canvas implements Runnable {
     private ParticleHandler particles;
     private Player player;
     private QuestionList questionList;
+    private ScoreList scoreList;
     private PromptHandler promptHandler;
 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -74,6 +77,7 @@ public class Game extends Canvas implements Runnable {
         setPreferredSize(size);
         screen = new Screen(width, height);
         keyMap = new Keyboard();
+        scoreList = new ScoreList("scores.xml");
 
         setLevel(1);
     }
@@ -271,10 +275,10 @@ public class Game extends Canvas implements Runnable {
     private void endGame() {
         JOptionPane.showMessageDialog(this, "Game Over");
         //enter hi score
+        addScore();
         int replayOption = JOptionPane.showConfirmDialog(this, "replay?");
         if(replayOption == JOptionPane.YES_OPTION) {
             reset();
-            setLevel(level);
         }
         else {
             System.exit(0);
@@ -317,7 +321,7 @@ public class Game extends Canvas implements Runnable {
         //Will work for a second grade learning game though.
         switch(level) {
             case 1:
-                timeMax = 30;
+                timeMax = 10;
                 currentTimeGlobal = timeMax;
                 pointsThreshold = 10;
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.BLUE);
@@ -358,8 +362,15 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    private void addScore() {
+        ScorePrompt scorePrompt = new ScorePrompt(player.getGetCount(), scoreList);
+        scorePrompt.write();
+        scorePrompt.showRank();
+    }
+
     private void reset() {
         player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         level = 1;
+        setLevel(level);
     }
 }
