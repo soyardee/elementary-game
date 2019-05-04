@@ -1,6 +1,9 @@
-package com.soyardee.questionParser;
+package com.soyardee.dataStruct;
+
+import com.soyardee.dataStruct.parsers.ScoreFileHandler;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.PriorityQueue;
 
@@ -35,13 +38,13 @@ public class ScoreList {
             ScoreFileHandler.writeOut(scoreList, filepath);
     }
 
-    //compares the object reference itself
+    //compares the object reference
     //make sure to pass in the score reference you created earlier, NOT THE ACTUAL SCORE VALUE
     public int getRank(Score s) {
-        Object[] arr = scoreList.toArray();
+        Object[] arr = getScoreArray();
         int count = -1;
         for (int i = 0; i < arr.length; i++) {
-            if (s == (Score) arr[i]) {
+            if (s == arr[i]) {
                 count = i + 1;
                 break;
             }
@@ -51,13 +54,23 @@ public class ScoreList {
 
     public Score[] getTopScores(int numberOfRanks) {
         //java reference issue. fixed now.
-        PriorityQueue<Score> temp = new PriorityQueue<>(scoreList);
+        Object[] arr = getScoreArray();
 
-        int arraysize = (temp.size() > numberOfRanks) ? numberOfRanks : temp.size();
+        int arraysize = (arr.length > numberOfRanks) ? numberOfRanks : arr.length;
         Score[] out = new Score[arraysize];
 
-        for(int i = 0; i < out.length; i++) { out[i] = temp.poll(); }
+        for(int i = 0; i < out.length; i++) { out[i] = (Score) arr[i]; }
+
+        Arrays.sort(out);
+        Collections.reverse(Arrays.asList(out));
 
         return out;
+    }
+
+    private Object[] getScoreArray() {
+        Object[] arr = scoreList.toArray();
+        Arrays.sort(arr);
+        Collections.reverse(Arrays.asList(arr));
+        return arr;
     }
 }

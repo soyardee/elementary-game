@@ -1,4 +1,4 @@
-package com.soyardee.questionParser;
+package com.soyardee.dataStruct;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -13,10 +13,12 @@ import com.soyardee.elementaryGame.input.Keyboard;
 import com.soyardee.elementaryGame.level.AsteroidField;
 import com.soyardee.elementaryGame.level.ScrollingBackground;
 import com.soyardee.elementaryGame.level.StarField;
-import com.soyardee.questionParser.QuestionList;
-import com.soyardee.questionParser.ScoreList;
-import com.soyardee.questionPrompt.PromptHandler;
-import com.soyardee.questionPrompt.ScorePrompt;
+import com.soyardee.dataStruct.QuestionList;
+import com.soyardee.dataStruct.ScoreList;
+import com.soyardee.userDialog.ObjectivePrompt;
+import com.soyardee.userDialog.PromptHandler;
+import com.soyardee.userDialog.ScorePrompt;
+import jdk.nashorn.internal.scripts.JO;
 
 
 /*
@@ -26,12 +28,13 @@ import com.soyardee.questionPrompt.ScorePrompt;
  * This program is in no way sufficiently advanced or optimized, but requires no additional
  * dependencies.
  *
- * If I had a few months, I'd consider learning the LWJGL API to create low level access calls to OpenGL for
- * far better performance if I were to program in java at all :P
+ * If I had a few months, I'd consider learning the LWJGL API to create low level access calls to OpenGL/Vulkan for
+ * far better performance (or just use c++ like every other optimized game out there).
  */
 
 public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
+    private static final String GAME_VERSION = "0.10a";
 
     //the tick rate of the game
     private final int updateRate = 60;
@@ -43,9 +46,9 @@ public class Game extends Canvas implements Runnable {
     private static int scale = 3;                //the multiplier for the upscaled resolution
 
 
-    private int timeMax, currentTimeGlobal, pointsThreshold;
+    private int timeMax, currentTimeInstance, pointsThreshold;
 
-    private static String titleString = "Test Game";
+    private static String titleString = "Falling Stars " + GAME_VERSION;
 
     private Keyboard keyMap;
 
@@ -79,6 +82,9 @@ public class Game extends Canvas implements Runnable {
         keyMap = new Keyboard();
         scoreList = new ScoreList("scores.xml");
 
+        //copy this to the reset method if you want to see this every reload
+        showObjective();
+
         setLevel(1);
     }
 
@@ -86,11 +92,12 @@ public class Game extends Canvas implements Runnable {
         frame = new JFrame();
         frame.addKeyListener(keyMap);
         frame.setResizable(true);
-        frame.setTitle("Test Game");
+        frame.setTitle(titleString);
         frame.add(this);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
     }
 
@@ -134,48 +141,51 @@ public class Game extends Canvas implements Runnable {
         int frames = 0;     //how many frames to render
         int updates = 0;    //how many times the update method is called
 
+        frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
+
 
         //upon window creation, make sure that the user is active in this component
         //(for keyboard/mouse input)
         frame.requestFocus();
 
         boolean promptPause = false;
-
+        boolean pauseCheck = promptPause && pause;
 
         //the game loop itself
         while(running) {
-            if(!promptPause && !pause) {
-                long currentTime = System.nanoTime();
+            long currentTime = System.nanoTime();
 
-                delta += (currentTime - lastTime) / nano;
-                lastTime = currentTime;
-                while (delta >= 1) {
-                    update();
-                    updates++;
-                    delta = 0;
-                }
-                render();
-                frames++;
+            delta += (currentTime - lastTime) / nano;
+            lastTime = currentTime;
 
-                if (System.currentTimeMillis() - timer > 1000) {
-                    timer = System.currentTimeMillis();
-                    currentTimeGlobal--;
-                    frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
-
-                    //fixes the bug where the user clicks away from the window when the question prompt is active
-                    //also apparently bugs the user when it isn't focused. hmm.
-                    frame.requestFocus();
-                    updates = 0;
-                    frames = 0;
-                }
+            if(delta >= 1) {
+                if(!pauseCheck) update();
+                scrollingBG.update();
+                updates++;
+                delta = 0;
             }
+
+            render();
+            frames++;
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer = System.currentTimeMillis();
+                if(!pauseCheck) {
+                    currentTimeInstance--;
+                }
+                frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
+                updates = 0;
+                frames = 0;
+            }
+
             promptPause = promptHandler.isPaused();
+            pauseCheck = promptPause || pause;
         }
     }
 
 
     public void update() {
-        scrollingBG.update();
+
         asteroidField.update();
         starField.update();
         keyMap.update();
@@ -201,8 +211,6 @@ public class Game extends Canvas implements Runnable {
             player.reload();
         }
     }
-
-
 
     public void render() {
         //get the parent buffering type from the awt canvas
@@ -245,6 +253,7 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
+    //really basic but functions as necessary
     private void renderStringOverlay(Graphics g) {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.setColor(Color.white);
@@ -252,38 +261,49 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Points: " + player.getGetCount(), 0, 30);
         g.drawString("Health: " + player.getHP() + "/" + player.getMaxHP() , 0, 60);
         g.drawString("Shots : " + player.getFireCount() + "/" + player.getMaxFireCount(), 0, 90);
-        g.drawString("Time  : " + currentTimeGlobal, 0, 120);
+        g.drawString("Time  : " + currentTimeInstance, 0, 120);
     }
 
     private void checkWinCondition() {
-        if(currentTimeGlobal <= 0) {
+        if(currentTimeInstance <= 0) {
             pause = true;
             if (player.getGetCount() >= pointsThreshold) {
                 endGameWin();
             }
-            else
-                endGame();
+            else {
+                endGame("Not quite enough points to move on. You need " +
+                        (pointsThreshold - player.getGetCount()) +
+                        " more to pass this level.");
+            }
         }
 
         if(player.getHP() <= 0) {
             pause = true;
-            endGame();
+            endGame("You ran out of health! Game Over!");
         }
     }
 
     //if the lose condition is met (or game is beaten), do this
-    private void endGame() {
-        JOptionPane.showMessageDialog(this, "Game Over");
+    private void endGame(String message) {
+        JOptionPane.showMessageDialog(this, message);
         //enter hi score
         addScore();
-        int replayOption = JOptionPane.showConfirmDialog(this, "replay?");
-        if(replayOption == JOptionPane.YES_OPTION) {
+
+        String[] options = {"yes", "no"};
+
+        int replayOption = JOptionPane.showOptionDialog(
+                this,
+                "replay?",
+                "replay",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if(replayOption == 0) {
             reset();
         }
-        else {
-            System.exit(0);
-        }
-
+        else { System.exit(0); }
     }
 
     //if the win condition on a lower lever is met, do this
@@ -294,18 +314,14 @@ public class Game extends Canvas implements Runnable {
             setLevel(level);
         }
         else if(level == 3) {
-            JOptionPane.showMessageDialog(this, "You made it through all three levels! Good job!");
-            endGame();
-        }
-        else {
-            endGame();
+            endGame("You made it through all three levels! Good job!");
         }
     }
 
     //level ranges from 1 to 3 for each level. Use the static game reference for clarity.
     //when loading a new level, you can pass the previous score in to continue counting up
     public void setLevel(int level) {
-        this.level = level;
+        this.level = (level <= 3) ? level : 3;
 
         pause = false;
 
@@ -322,7 +338,7 @@ public class Game extends Canvas implements Runnable {
         switch(level) {
             case 1:
                 timeMax = 10;
-                currentTimeGlobal = timeMax;
+                currentTimeInstance = timeMax;
                 pointsThreshold = 10;
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.BLUE);
                 asteroidField = new AsteroidField(20, 0.1f, screen);
@@ -334,7 +350,7 @@ public class Game extends Canvas implements Runnable {
 
             case 2:
                 timeMax = 60;
-                currentTimeGlobal = timeMax;
+                currentTimeInstance = timeMax;
                 pointsThreshold = 10;
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.GREEN);
                 asteroidField = new AsteroidField(20, 0.1f, screen);
@@ -346,7 +362,7 @@ public class Game extends Canvas implements Runnable {
 
             case 3:
                 timeMax = 5;
-                currentTimeGlobal = timeMax;
+                currentTimeInstance = timeMax;
                 pointsThreshold = 10;
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.RED);
                 asteroidField = new AsteroidField(20, 0.1f, screen);
@@ -364,13 +380,23 @@ public class Game extends Canvas implements Runnable {
 
     private void addScore() {
         ScorePrompt scorePrompt = new ScorePrompt(player.getGetCount(), scoreList);
-        scorePrompt.write();
-        scorePrompt.showRank();
+
+        if(scorePrompt.getInputName() != null) {
+            if (!scorePrompt.getInputName().equals("")) {
+                scorePrompt.write();
+                scorePrompt.showRank();
+            }
+        }
     }
 
     private void reset() {
         player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         level = 1;
         setLevel(level);
+    }
+
+    //create a nonmodal dialog for explaining how the game works. Usually done on instantiation.
+    private void showObjective() {
+        new ObjectivePrompt();
     }
 }

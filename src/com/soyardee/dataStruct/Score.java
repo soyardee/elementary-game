@@ -1,4 +1,4 @@
-package com.soyardee.questionParser;
+package com.soyardee.dataStruct;
 
 public class Score implements Comparable {
     private int score;
@@ -15,7 +15,6 @@ public class Score implements Comparable {
         this.score = score;
     }
 
-    //TODO order scores so that the newest goes to the top.
     @Override
     public int compareTo(Object o) {
         Score other = (Score) o;

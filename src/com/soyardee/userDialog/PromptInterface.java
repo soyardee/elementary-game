@@ -1,7 +1,7 @@
-package com.soyardee.questionPrompt;
+package com.soyardee.userDialog;
 
-import com.soyardee.questionParser.Question;
-import com.soyardee.questionParser.QuestionList;
+import com.soyardee.dataStruct.Question;
+import com.soyardee.dataStruct.QuestionList;
 
 import javax.swing.*;
 import java.awt.*;

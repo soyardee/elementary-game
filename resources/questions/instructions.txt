@@ -1,0 +1,11 @@
+HOW TO PLAY:
+The goal is to get as many points as possible by shooting asteroids and stars.
+However, you need to answer questions in order to reload your ship's weapon.
+
+To collect a star, you must shoot it and then it becomes available to pick up for extra points.
+Asteroids are worth 1 point, stars are worth 3.
+
+CONTROLS:
+Side arrow keys to move left and right
+Up arrow fires a shot.
+Down arrow reloads.

@@ -1,5 +1,6 @@
-package com.soyardee.questionParser;
+package com.soyardee.dataStruct.parsers;
 
+import com.soyardee.dataStruct.Score;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

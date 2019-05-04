@@ -1,5 +1,6 @@
-package com.soyardee.questionParser;
+package com.soyardee.dataStruct.parsers;
 
+import com.soyardee.dataStruct.Score;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -20,7 +21,7 @@ import java.util.PriorityQueue;
 
 public class ScoreFileHandler {
 
-    //WARNING Overwrites previous file with the current heap every time. Does not smartly add to the file.
+    //WARNING Overwrites previous file with the current heap every time.
     public static void writeOut(PriorityQueue<Score> list, String filename) {
         try{
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -44,7 +45,6 @@ public class ScoreFileHandler {
                 scoreTitle.appendChild(nameTitle);
             }
 
-            //some stuff that I'm not fully sure how it works, but it seems to function ok.
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 

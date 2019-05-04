@@ -9,7 +9,7 @@ import com.soyardee.elementaryGame.level.StarField;
 
 public class Player extends Mob {
 
-    private int MAX_HP = 20;
+    private int MAX_HP = 10;
 
     private Keyboard input;
 

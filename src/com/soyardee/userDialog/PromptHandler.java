@@ -1,6 +1,6 @@
-package com.soyardee.questionPrompt;
+package com.soyardee.userDialog;
 
-import com.soyardee.questionParser.QuestionList;
+import com.soyardee.dataStruct.QuestionList;
 
 /**
  * This class runs on the main game thread, NOT the swing thread.
