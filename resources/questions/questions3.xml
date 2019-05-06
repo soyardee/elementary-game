@@ -1,0 +1,111 @@
+<!-- Subtraction questions, based approximately on 5's and 10's
+I'm aware this system for storing math questions is pointless, but this allows the user to generate a list of
+questions based off of whatever criteria they want using an external program.
+-->
+<questions>
+    <question>
+        <prompt>10 - 5 = ?</prompt>
+        <correct>5</correct>
+        <alt>4</alt>
+        <alt>7</alt>
+        <alt>8</alt>
+    </question>
+    <question>
+        <prompt>15 - 10 = ?</prompt>
+        <correct>5</correct>
+        <alt>12</alt>
+        <alt>6</alt>
+        <alt>7</alt>
+    </question>
+    <question>
+        <prompt>17 - 5 = ?</prompt>
+        <correct>12</correct>
+        <alt>13</alt>
+        <alt>11</alt>
+        <alt>10</alt>
+    </question>
+    <question>
+        <prompt>19 - 2 = ?</prompt>
+        <correct>17</correct>
+        <alt>15</alt>
+        <alt>18</alt>
+        <alt>16</alt>
+    </question>
+    <question>
+        <prompt>9 - 5 = ?</prompt>
+        <correct>4</correct>
+        <alt>5</alt>
+        <alt>3</alt>
+        <alt>7</alt>
+    </question>
+    <question>
+        <prompt>7 - 5 = ?</prompt>
+        <correct>2</correct>
+        <alt>4</alt>
+        <alt>1</alt>
+        <alt>3</alt>
+    </question>
+    <question>
+        <prompt>25 - 10 = ?</prompt>
+        <correct>15</correct>
+        <alt>10</alt>
+        <alt>5</alt>
+        <alt>20</alt>
+    </question>
+    <question>
+        <prompt>30 - 10 = ?</prompt>
+        <correct>20</correct>
+        <alt>10</alt>
+        <alt>15</alt>
+        <alt>25</alt>
+    </question>
+    <question>
+        <prompt>20 - 5 = ?</prompt>
+        <correct>15</correct>
+        <alt>10</alt>
+        <alt>5</alt>
+        <alt>17</alt>
+    </question>
+    <question>
+        <prompt>15 - 10 = ?</prompt>
+        <correct>5</correct>
+        <alt>0</alt>
+        <alt>10</alt>
+        <alt>8</alt>
+    </question>
+    <question>
+        <prompt>18 - 5 = ?</prompt>
+        <correct>13</correct>
+        <alt>12</alt>
+        <alt>10</alt>
+        <alt>8</alt>
+    </question>
+    <question>
+        <prompt>17 - 10 = ?</prompt>
+        <correct>7</correct>
+        <alt>8</alt>
+        <alt>12</alt>
+        <alt>10</alt>
+    </question>
+    <question>
+        <prompt>18 - 10 = ?</prompt>
+        <correct>8</correct>
+        <alt>9</alt>
+        <alt>7</alt>
+        <alt>6</alt>
+    </question>
+    <question>
+        <prompt>8 - 5 = ?</prompt>
+        <correct>3</correct>
+        <alt>4</alt>
+        <alt>5</alt>
+        <alt>1</alt>
+    </question>
+    <question>
+        <prompt>16 - 6 = ?</prompt>
+        <correct>10</correct>
+        <alt>6</alt>
+        <alt>12</alt>
+        <alt>8</alt>
+    </question>
+</questions>

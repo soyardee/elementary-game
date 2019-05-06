@@ -14,8 +14,6 @@ import java.util.Random;
  * hands off the keyboard to click the correct answer. The game will immediately resume, and it can
  * be difficult to properly transition back to the game. Not to mention that the question window
  * pops up immediately in a separate thread, causing the player to become confused.
- *
- * TODO make this a part of the game interface. Feeling cute, might delete later.
  */
 
 
@@ -43,24 +41,18 @@ public class PromptInterface implements ActionListener {
     };
 
 
-
-
-    //TODO allow keyboard input to select option
     public void createWindow() {
         isClosed = false;
         correctAnswer = false;
         wrongAnswer = false;
         frame = new JFrame();
 
-
         question = questionList.getQuestion();
         answerStrings = question.getAnswers();
         buttonOptions = new JButton[answerStrings.length];
 
-
         pausePanel = new JPanel(new BorderLayout());
         buttonPanel = new JPanel(new FlowLayout());
-
 
         questionPanel = new JPanel(new FlowLayout());
         JLabel prompt = new JLabel(question.getQuestionPrompt());
@@ -84,8 +76,6 @@ public class PromptInterface implements ActionListener {
             answerPanel.add(answerPanelFlow);
         }
 
-
-
         questionPanel.add(prompt);
         pausePanel.add(questionPanel, BorderLayout.NORTH);
         pausePanel.add(answerPanel, BorderLayout.CENTER);
@@ -100,8 +90,6 @@ public class PromptInterface implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.addComponentListener(componentListener);
     }
-
-
 
     public PromptInterface(QuestionList list) {
         this.questionList = list;
@@ -125,9 +113,6 @@ public class PromptInterface implements ActionListener {
             }
         }
     }
-
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

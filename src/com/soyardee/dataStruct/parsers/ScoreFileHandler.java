@@ -45,6 +45,7 @@ public class ScoreFileHandler {
                 scoreTitle.appendChild(nameTitle);
             }
 
+            //some stuff that I'm not fully sure how it works, but it seems to function ok.
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 

@@ -18,13 +18,8 @@ import com.soyardee.dataStruct.ScoreList;
 import com.soyardee.userDialog.ObjectivePrompt;
 import com.soyardee.userDialog.PromptHandler;
 import com.soyardee.userDialog.ScorePrompt;
-import jdk.nashorn.internal.scripts.JO;
-
 
 /*
- * The base engine code is done with assistance from TheChernoProject's java game programming
- * series where noted. (threads, custom screen class, and tile handling).
- * Otherwise, all game design was by me.
  * This program is in no way sufficiently advanced or optimized, but requires no additional
  * dependencies.
  *
@@ -36,24 +31,34 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
     private static final String GAME_VERSION = "0.10a";
 
-    //the tick rate of the game
+    //the tick rate of the game (per second)
     private final int updateRate = 60;
 
-    private int level = 0;
+    //declaring and instantiating the initial level
+    private int level = 1;
 
+    //this is the size of the pixel array that is being written to.
+    //changing this value changes the actual size of the map.
+    //however, this comes at a significant performance cost.
     private static int width = 300;
     private static int height = width / 16 * 9;
-    private static int scale = 3;                //the multiplier for the upscaled resolution
+    //the default size of the window when not maximized = width * scale
+    private static int scale = 3;
 
-
+    //integers to keep track of the time for frame updates, timers, etc.
     private int timeMax, currentTimeInstance, pointsThreshold;
+    private int[] pointsLevelValues = {15, 15, 20};
 
+    //the string that appears in the title window
     private static String titleString = "Falling Stars " + GAME_VERSION;
 
     private Keyboard keyMap;
 
     private Thread thread;                      //the game subprocess
     private boolean running = false;
+
+    //the instance variable that controls what elements should update
+    //ex: the background keeps scrolling when a modal dialog pops up, but the asteroids won't move
     private boolean pause = false;
 
     private Screen screen;
@@ -65,7 +70,6 @@ public class Game extends Canvas implements Runnable {
     private QuestionList questionList;
     private ScoreList scoreList;
     private PromptHandler promptHandler;
-
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
     //convert the window raster into an array of integers
@@ -76,8 +80,11 @@ public class Game extends Canvas implements Runnable {
 
 
     public Game() {
+        //set the windowed size when not maximized.
         Dimension size = new Dimension(width*scale, height*scale);
         setPreferredSize(size);
+
+        //these classes only need to be loaded in once, and are not reset later.
         screen = new Screen(width, height);
         keyMap = new Keyboard();
         scoreList = new ScoreList("scores.xml");
@@ -85,6 +92,7 @@ public class Game extends Canvas implements Runnable {
         //copy this to the reset method if you want to see this every reload
         showObjective();
 
+        //load the 1st level objects into the instance variables
         setLevel(1);
     }
 
@@ -97,7 +105,7 @@ public class Game extends Canvas implements Runnable {
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
     }
 
@@ -106,7 +114,7 @@ public class Game extends Canvas implements Runnable {
         //mark the game as running to enter the gameloop
         running = true;
         //open this instance of the game in a new thread.
-        thread = new Thread(this, "Display");
+        thread = new Thread(this, "Game");
         //boot up the thread into a new instance
         thread.start();
     }
@@ -114,11 +122,13 @@ public class Game extends Canvas implements Runnable {
     //kill the thread instance
     //required for the runnable interface
     public synchronized void stop() {
-        //stop the game loop when the stop command is called
+        //stop the game loop
         running = false;
 
+        //make sure the thread exists before waiting
         if(thread != null) {
             try {
+                //wait for this thread to stop
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -128,7 +138,9 @@ public class Game extends Canvas implements Runnable {
 
     //the code executed when the game starts
     public void run() {
+        //create a new window for the game
         initFrame();
+
         //get the precise time since the game start
         long lastTime = System.nanoTime();
 
@@ -137,10 +149,11 @@ public class Game extends Canvas implements Runnable {
 
         //calculated to the division of a second (ex 60 for 1/60th of a second)
         final double nano = 1000000000.0 / (double) updateRate;
-        double delta = 0;
-        int frames = 0;     //how many frames to render
-        int updates = 0;    //how many times the update method is called
+        double delta = 0;   //difference between the last checked tick and the next
+        int frames = 0;     //how many frames have been rendered in the last second
+        int updates = 0;    //how many times the update method is called in the last second
 
+        //initial words used when the frame pops up. More or less a placeholder.
         frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
 
 
@@ -158,6 +171,7 @@ public class Game extends Canvas implements Runnable {
             delta += (currentTime - lastTime) / nano;
             lastTime = currentTime;
 
+            //do this every tick (usually 1/60th of a second)
             if(delta >= 1) {
                 if(!pauseCheck) update();
                 scrollingBG.update();
@@ -165,19 +179,25 @@ public class Game extends Canvas implements Runnable {
                 delta = 0;
             }
 
+            //render every possible cycle.
+            //place in the tick statement to enforce (updateRate) fps.
             render();
             frames++;
 
+
+            //do this every second (approx)
             if (System.currentTimeMillis() - timer > 1000) {
                 timer = System.currentTimeMillis();
-                if(!pauseCheck) {
-                    currentTimeInstance--;
-                }
+                if(!pauseCheck) { currentTimeInstance--; }
+
+                //display the current count of updates in the title bar
                 frame.setTitle(titleString + "  |  " + updates + " ups, " + frames + " fps");
                 updates = 0;
                 frames = 0;
             }
 
+            //check that the game isn't paused to some extent
+            //like when the question is asked, or when the game ends
             promptPause = promptHandler.isPaused();
             pauseCheck = promptPause || pause;
         }
@@ -185,13 +205,13 @@ public class Game extends Canvas implements Runnable {
 
 
     public void update() {
-
+        //call the respective update method for each class
         asteroidField.update();
         starField.update();
         keyMap.update();
 
-        //looks a bit ugly, but I did not place an object reference into the collision handling
-        //upon construction
+        //looks a bit ugly. I did not place an object reference into the collision handling
+        //upon construction. That's a v0.2 fix. If that ever happens.
         player.update(asteroidField, starField, particles);
         particles.update(asteroidField, starField, player);
 
@@ -202,13 +222,15 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void questionUpdate() {
+        //check that the player has pressed the down key to request a question
         if(player.getRequestQuestion()) {
-            promptHandler.openFrame();
-            keyMap.refresh();
+            promptHandler.openFrame();          //open a new question
+            keyMap.refresh();                   //solves the "sticky keys" issue
         }
 
         if(promptHandler.isCorrectAnswer()) {
             player.reload();
+            frame.requestFocus();
         }
     }
 
@@ -255,7 +277,7 @@ public class Game extends Canvas implements Runnable {
 
     //really basic but functions as necessary
     private void renderStringOverlay(Graphics g) {
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.setFont(new Font("Monospaced", Font.BOLD, 35));
         g.setColor(Color.white);
 
         g.drawString("Points: " + player.getGetCount(), 0, 30);
@@ -273,7 +295,7 @@ public class Game extends Canvas implements Runnable {
             else {
                 endGame("Not quite enough points to move on. You need " +
                         (pointsThreshold - player.getGetCount()) +
-                        " more to pass this level.");
+                        " more points to pass this level.");
             }
         }
 
@@ -287,10 +309,12 @@ public class Game extends Canvas implements Runnable {
     private void endGame(String message) {
         JOptionPane.showMessageDialog(this, message);
         //enter hi score
+        player.addTotal();
         addScore();
 
         String[] options = {"yes", "no"};
 
+        //prompt the user to replay
         int replayOption = JOptionPane.showOptionDialog(
                 this,
                 "replay?",
@@ -306,13 +330,16 @@ public class Game extends Canvas implements Runnable {
         else { System.exit(0); }
     }
 
-    //if the win condition on a lower lever is met, do this
+
     private void endGameWin() {
+        //if the win condition on a lower lever is met, do this
         if(level < 3) {
             level++;
             JOptionPane.showMessageDialog(this, "Point goal met, advancing to level " + level);
+            player.addTotal();
             setLevel(level);
         }
+        //otherwise the game is over because they have beaten all three levels
         else if(level == 3) {
             endGame("You made it through all three levels! Good job!");
         }
@@ -322,14 +349,16 @@ public class Game extends Canvas implements Runnable {
     //when loading a new level, you can pass the previous score in to continue counting up
     public void setLevel(int level) {
         this.level = (level <= 3) ? level : 3;
-
         pause = false;
 
+        //only called when the game is first instantiated
         if(player == null) {
             player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         }
 
+        //reset the player's health points each level
         player.rechargeHP();
+        player.clearShots();
         keyMap.refresh();
 
         //I know, a really bad way to implement level loading :(
@@ -337,38 +366,38 @@ public class Game extends Canvas implements Runnable {
         //Will work for a second grade learning game though.
         switch(level) {
             case 1:
-                timeMax = 10;
+                timeMax = 30;
                 currentTimeInstance = timeMax;
-                pointsThreshold = 10;
+                pointsThreshold = pointsLevelValues[0];
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.BLUE);
-                asteroidField = new AsteroidField(20, 0.1f, screen);
+                asteroidField = new AsteroidField(20, 0.1f, 1, true,screen);
                 starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
                 particles = new ParticleHandler();
-                questionList = new QuestionList("/questions/questions.xml");
+                questionList = new QuestionList("/questions/questions1.xml");
                 promptHandler = new PromptHandler(questionList);
                 break;
 
             case 2:
-                timeMax = 60;
+                timeMax = 30;
                 currentTimeInstance = timeMax;
-                pointsThreshold = 10;
+                pointsThreshold = pointsLevelValues[1];
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.GREEN);
-                asteroidField = new AsteroidField(20, 0.1f, screen);
+                asteroidField = new AsteroidField(20, 0.1f, 0, true, screen);
                 starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
                 particles = new ParticleHandler();
-                questionList = new QuestionList("/questions/questions.xml");
+                questionList = new QuestionList("/questions/questions2.xml");
                 promptHandler = new PromptHandler(questionList);
                 break;
 
             case 3:
-                timeMax = 5;
+                timeMax = 45;
                 currentTimeInstance = timeMax;
-                pointsThreshold = 10;
+                pointsThreshold = pointsLevelValues[2];
                 scrollingBG = new ScrollingBackground(16, ScrollingBackground.RED);
-                asteroidField = new AsteroidField(20, 0.1f, screen);
+                asteroidField = new AsteroidField(25, 0.1f, 2, false, screen);
                 starField = new StarField(2, 4*updateRate, 3*updateRate, screen.width, screen.height);
                 particles = new ParticleHandler();
-                questionList = new QuestionList("/questions/questions.xml");
+                questionList = new QuestionList("/questions/questions3.xml");
                 promptHandler = new PromptHandler(questionList);
                 break;
 
@@ -376,10 +405,13 @@ public class Game extends Canvas implements Runnable {
                 System.err.println("not a valid level number");
                 break;
         }
+
+        showPointsObjective(level);
     }
 
+    //prompt the user to enter their name to record it
     private void addScore() {
-        ScorePrompt scorePrompt = new ScorePrompt(player.getGetCount(), scoreList);
+        ScorePrompt scorePrompt = new ScorePrompt(player.getTotalScore(), scoreList);
 
         if(scorePrompt.getInputName() != null) {
             if (!scorePrompt.getInputName().equals("")) {
@@ -389,6 +421,7 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    //set the level back to level 1 with a new player so that the score becomes 0
     private void reset() {
         player = new Player(width / 2 - 16, height - 32, 10, 5, keyMap, screen);
         level = 1;
@@ -398,5 +431,9 @@ public class Game extends Canvas implements Runnable {
     //create a nonmodal dialog for explaining how the game works. Usually done on instantiation.
     private void showObjective() {
         new ObjectivePrompt();
+    }
+
+    private void showPointsObjective(int level) {
+        JOptionPane.showMessageDialog(null, "You need " + pointsLevelValues[level-1] + " points to pass this level");
     }
 }

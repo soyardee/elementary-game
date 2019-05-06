@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -65,11 +69,23 @@ public class ObjectivePrompt extends JDialog implements ActionListener {
     private void loadInstructions() {
         instructions = "";
         try {
-            URI uri = getClass().getResource("/questions/instructions.txt").toURI();
-            instructions = new String(Files.readAllBytes(Paths.get(uri)));
+            InputStream in = getClass().getResourceAsStream("/questions/instructions.txt");
+            instructions = readFromInputStream(in);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String readFromInputStream(InputStream inputStream)
+            throws IOException {
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+        }
+        return resultStringBuilder.toString();
     }
 
     @Override

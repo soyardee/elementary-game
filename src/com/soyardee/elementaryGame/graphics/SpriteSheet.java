@@ -12,7 +12,7 @@ public class SpriteSheet {
     public int[] pixels;
 
     //SpriteSheets paths and callable constructors go here
-    public static SpriteSheet tiles = new SpriteSheet("/tex/sprites.png", 256);
+    public static SpriteSheet tiles = new SpriteSheet("/tex/sprites.png", 64);
 
     public SpriteSheet(String path, int size) {
         this.SIZE = size;
@@ -22,6 +22,7 @@ public class SpriteSheet {
         load();
     }
 
+    //TODO load in any size image as long as it's a multiple of the sprite sizes
     private void load() {
         try {
             BufferedImage image = ImageIO.read(SpriteSheet.class.getResource(path));

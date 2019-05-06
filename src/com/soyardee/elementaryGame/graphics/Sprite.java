@@ -9,15 +9,8 @@ public class Sprite {
     public int[] pixels;
     private SpriteSheet sheet;
 
-
-
-    //static sprite types go here. Perhaps we can automate this when we load the classes? Eh.
-    public static Sprite emptySprite = new Sprite(16, 0x0000FF);
-    public static Sprite grass = new Sprite(16, 0,0, SpriteSheet.tiles);
-
     //entity sprites
     public static Sprite player0 = new Sprite(32, 0, 1, SpriteSheet.tiles);
-
 
     //asteroid sprites
     public static Sprite asteroid0 = new Sprite(16, 0, 0, SpriteSheet.tiles);

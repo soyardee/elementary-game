@@ -14,13 +14,17 @@ public class AsteroidField {
     private ArrayList<Asteroid> asteroidArrayList;
     private Screen screen;
     public int maxOnScreen;
+    private int minSpeed;
     public float spawnChance;
     private Random random;
+    private boolean wait;
 
-    public AsteroidField(int maxOnScreen, float spawnChance, Screen screen) {
+    public AsteroidField(int maxOnScreen, float spawnChance, int minSpeed, boolean wait, Screen screen) {
         this.maxOnScreen = maxOnScreen;
         this.spawnChance = spawnChance;
+        this.minSpeed = minSpeed;
         this.screen = screen;
+        this.wait = wait;
         asteroidArrayList = new ArrayList<>();
         random = new Random();
     }
@@ -34,12 +38,17 @@ public class AsteroidField {
 
         for(Asteroid a: asteroidArrayList) {
             a.update(screen.height);
-            allowNewAsteroid = a.isBelowTop();
+            allowNewAsteroid = a.isBelowTop() || !wait;
         }
 
         if(asteroidArrayList.size() < maxOnScreen && allowNewAsteroid && chance) {
             int xstart = random.nextInt((screen.width/16)+1);
-            asteroidArrayList.add(new Asteroid(xstart, -16, Sprite.asteroid0));
+            if(minSpeed == 0) {
+                asteroidArrayList.add(new Asteroid(xstart, -16, Sprite.asteroid0));
+            }
+            else{
+                asteroidArrayList.add(new Asteroid(xstart, -16, minSpeed, Sprite.asteroid0));
+            }
         }
 
         asteroidArrayList.removeIf(n -> (n.isDiscard()));

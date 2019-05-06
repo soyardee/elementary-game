@@ -24,6 +24,7 @@ public class Player extends Mob {
     private int reloadCount, maxHP, currentHP;
 
     public int getCount = 0;
+    private int totalScore = 0;
 
     public Player(int x, int y, int maxFireCount, int reloadCount, Keyboard input, Screen screen) {
         this.x = x;
@@ -39,6 +40,11 @@ public class Player extends Mob {
 
     public void reload() {
         fireCount = (fireCount + reloadCount > maxFireCount) ? maxFireCount : fireCount + reloadCount;
+    }
+
+    public void addTotal() {
+        totalScore += getCount;
+        getCount = 0;
     }
 
     public void update(AsteroidField asteroidField, StarField starField, ParticleHandler particle) {
@@ -66,7 +72,7 @@ public class Player extends Mob {
         }
 
         if(starField.isOverlapPlayer(x, y, 32, 32)) {
-            getCount++;
+            getCount+=3;
         }
 
         if(xa != 0) move(xa, ya);
@@ -84,4 +90,6 @@ public class Player extends Mob {
     public int getMaxFireCount() {return maxFireCount;}
     public boolean getRequestQuestion() {return requestQuestion;}
     public void increaseGetCount(int amount) { getCount += amount;}
+    public int getTotalScore() {return totalScore;}
+    public void clearShots() {fireCount = 0;}
 }
